@@ -67,7 +67,7 @@ ___TEMPLATE_PARAMETERS___
         "value": "trackRevenue"
       }
     ],
-    "displayName": "Tag Type",
+    "displayName": "Tag type",
     "defaultValue": "init",
     "simpleValueType": true,
     "name": "type",
@@ -178,7 +178,7 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY"
       }
     ],
-    "displayName": "Conviva Customer Key*",
+    "displayName": "Conviva customer key*",
     "simpleValueType": true,
     "name": "convivaCustomerKey",
     "type": "TEXT",
@@ -211,7 +211,7 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "displayName": "App Version",
+    "displayName": "App version",
     "simpleValueType": true,
     "name": "appVersion",
     "type": "TEXT",
@@ -446,7 +446,7 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "displayName": "Default Custom Tags",
+    "displayName": "Default custom tags",
     "name": "initCustomTags",
     "simpleTableColumns": [
       {
@@ -494,34 +494,34 @@ ___TEMPLATE_PARAMETERS___
         "type": "EQUALS"
       }
     ],
-    "displayName": "Device Metadata (optional)",
+    "displayName": "Device metadata (optional)",
     "name": "deviceMetadataGroup",
     "groupStyle": "ZIPPY_CLOSED",
     "type": "GROUP",
     "subParams": [
       {
-        "displayName": "Device Brand",
+        "displayName": "Device brand",
         "simpleValueType": true,
         "name": "deviceBrand",
         "type": "TEXT",
         "valueHint": "e.g. Apple, Samsung SmartTV"
       },
       {
-        "displayName": "Device Manufacturer",
+        "displayName": "Device manufacturer",
         "simpleValueType": true,
         "name": "deviceManufacturer",
         "type": "TEXT",
         "valueHint": "e.g. Samsung, Apple"
       },
       {
-        "displayName": "Device Model",
+        "displayName": "Device model",
         "simpleValueType": true,
         "name": "deviceModel",
         "type": "TEXT",
         "valueHint": "e.g. iPhone 6 Plus, MacBookPro"
       },
       {
-        "displayName": "Device Type",
+        "displayName": "Device type",
         "simpleValueType": true,
         "name": "deviceType",
         "type": "SELECT",
@@ -566,28 +566,28 @@ ___TEMPLATE_PARAMETERS___
         ]
       },
       {
-        "displayName": "Device Version",
+        "displayName": "Device version",
         "simpleValueType": true,
         "name": "deviceVersion",
         "type": "TEXT",
         "valueHint": "e.g. NAForMac"
       },
       {
-        "displayName": "Operating System Name",
+        "displayName": "Operating system name",
         "simpleValueType": true,
         "name": "deviceOsName",
         "type": "TEXT",
         "valueHint": "e.g. MAC, WINDOWS, LINUX, IOS, ANDROID"
       },
       {
-        "displayName": "Operating System Version",
+        "displayName": "Operating system version",
         "simpleValueType": true,
         "name": "deviceOsVersion",
         "type": "TEXT",
         "valueHint": "e.g. 10.13.6, 8.1"
       },
       {
-        "displayName": "Device Category",
+        "displayName": "Device category",
         "simpleValueType": true,
         "name": "deviceCategory",
         "type": "SELECT",
@@ -672,14 +672,14 @@ ___TEMPLATE_PARAMETERS___
         ]
       },
       {
-        "displayName": "Framework Name",
+        "displayName": "Framework name",
         "simpleValueType": true,
         "name": "deviceFrameworkName",
         "type": "TEXT",
         "valueHint": "e.g. Web"
       },
       {
-        "displayName": "Framework Version",
+        "displayName": "Framework version",
         "simpleValueType": true,
         "name": "deviceFrameworkVersion",
         "type": "TEXT",
@@ -706,7 +706,7 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "displayName": "Page Title Override",
+    "displayName": "Page title override",
     "simpleValueType": true,
     "name": "trackPageViewTitle",
     "type": "TEXT",
@@ -724,7 +724,7 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY"
       }
     ],
-    "displayName": "Event Name*",
+    "displayName": "Event name*",
     "simpleValueType": true,
     "name": "eventName",
     "type": "TEXT",
@@ -737,7 +737,7 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "displayName": "Event Data",
+    "displayName": "Event data",
     "name": "eventData",
     "simpleTableColumns": [
       {
@@ -766,7 +766,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "SELECT",
     "name": "eventDataObject",
-    "displayName": "Event Data Object (variable)",
+    "displayName": "Event data object (variable)",
     "macrosInSelect": true,
     "selectItems": [],
     "simpleValueType": true,
@@ -1004,7 +1004,7 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "displayName": "Custom Tags",
+    "displayName": "Custom tags",
     "name": "setCustomTagsTable",
     "simpleTableColumns": [
       {
@@ -1033,7 +1033,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "SELECT",
     "name": "setCustomTagsObject",
-    "displayName": "Custom Tags (variable)",
+    "displayName": "Custom tags (variable)",
     "macrosInSelect": true,
     "selectItems": [],
     "simpleValueType": true,
@@ -1049,7 +1049,7 @@ ___TEMPLATE_PARAMETERS___
   },
   {
     "help": "Comma-separated list of tag keys to unset, e.g. tagKey1, tagKey2",
-    "displayName": "Tag Keys to Unset",
+    "displayName": "Tag keys to unset",
     "simpleValueType": true,
     "name": "unsetCustomTagsKeys",
     "type": "TEXT",
@@ -1067,7 +1067,7 @@ ___TEMPLATE_PARAMETERS___
         "type": "NON_EMPTY"
       }
     ],
-    "displayName": "Error Message*",
+    "displayName": "Error message*",
     "simpleValueType": true,
     "name": "trackErrorMessage",
     "type": "TEXT",
