@@ -1,0 +1,8 @@
+# Google Tag Manager Community Template Gallery metadata
+# See: https://developers.google.com/tag-platform/tag-manager/templates/gallery
+
+homepage: "https://www.conviva.ai"
+documentation: "https://github.com/Conviva/conviva-dpi-js-sdk-gtm"
+versions:
+  - sha: "PLACEHOLDER_REPLACE_WITH_INITIAL_COMMIT_SHA"
+    changeNotes: "Initial release. Conviva DPI JS SDK tag: Initialize (with optional Cohort Replay), Set User ID, Track Page View, Track Custom Event, Set/Unset Custom Tags, Track Error, Track Revenue."
