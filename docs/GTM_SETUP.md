@@ -18,12 +18,20 @@ Create these in **Variables** → **User-Defined Variables** → **New**. Use th
 | **Conviva – User ID** | Data Layer Variable | Key: `convivaUserId`. For Set User ID and optional Init User ID. |
 | **Conviva – Page View Title** | Data Layer Variable | Key: `convivaPageViewTitle`. Optional override for Track Page View. |
 | **Conviva – Error Message** | Data Layer Variable | Key: `convivaErrorMessage`. For Track Error. |
-| **Conviva – Error Filename** | Data Layer Variable | Key: `convivaErrorFilename`. Optional. |
-| **Conviva – Revenue Order Amount** | Data Layer Variable | Key: `convivaRevenueOrderAmount`. Required. |
-| **Conviva – Revenue Order ID** | Data Layer Variable | Key: `convivaRevenueOrderId`. Required. |
-| **Conviva – Revenue Currency** | Data Layer Variable | Key: `convivaRevenueCurrency`. Required (e.g. USD). |
-| **Conviva – Revenue Items List** | Data Layer Variable | Key: `convivaRevenueItems`. Array of line items (objects). |
-| **Conviva – Revenue Data** | Data Layer Variable | Key: `convivaRevenueData`. Full revenue payload object (optional). |
+| **Conviva – Error Filename** | Data Layer Variable | Key: `convivaErrorFilename`. Optional filename for Track Error. |
+| **Conviva – Error Object** | Data Layer Variable | Key: `convivaErrorObject`. Optional JS Error object for Track Error. |
+| **Conviva – Revenue Order Amount** | Data Layer Variable | Key: `convivaRevenueOrderAmount`. Required. Total order amount (numeric). |
+| **Conviva – Revenue Order ID** | Data Layer Variable | Key: `convivaRevenueOrderId`. Required. Transaction/order ID (string). |
+| **Conviva – Revenue Currency** | Data Layer Variable | Key: `convivaRevenueCurrency`. Required. ISO 4217 currency code (e.g. `USD`). |
+| **Conviva – Revenue Tax Amount** | Data Layer Variable | Key: `convivaRevenueTaxAmount`. Optional. Numeric tax amount. |
+| **Conviva – Revenue Shipping Cost** | Data Layer Variable | Key: `convivaRevenueShippingCost`. Optional. Numeric shipping cost. |
+| **Conviva – Revenue Discount** | Data Layer Variable | Key: `convivaRevenueDiscount`. Optional. Numeric discount/coupon value. |
+| **Conviva – Revenue Cart Size** | Data Layer Variable | Key: `convivaRevenueCartSize`. Optional. Numeric item count. |
+| **Conviva – Revenue Payment Method** | Data Layer Variable | Key: `convivaRevenuePaymentMethod`. Optional. e.g. `card`, `ApplePay`. |
+| **Conviva – Revenue Payment Provider** | Data Layer Variable | Key: `convivaRevenuePaymentProvider`. Optional. e.g. `Stripe`, `Adyen`. |
+| **Conviva – Revenue Order Status** | Data Layer Variable | Key: `convivaRevenueOrderStatus`. Optional. e.g. `completed`, `pending`. |
+| **Conviva – Revenue Items List** | Data Layer Variable | Key: `convivaRevenueItems`. Array of line-item objects. |
+| **Conviva – Revenue Data** | Data Layer Variable | Key: `convivaRevenueData`. Optional object merged into `extraMetadata`. |
 | **Conviva – Custom Tags** | Data Layer Variable | Key: `convivaCustomTags`. Object of key/value for Set Custom Tags. |
 | **Conviva – Unset Tag Keys** | Data Layer Variable | Key: `convivaUnsetTagKeys`. Comma-separated string or array for Unset Custom Tags. |
 
@@ -49,16 +57,16 @@ function() {
 }
 ```
 
-Then set the Init tag’s **Client ID (optional – set before init)** to `{{Conviva – Client ID}}` and use either **Conviva – All Pages (Init)** or **Conviva – Init (Custom Event)**; clientId will come from the URL when present, otherwise from the dataLayer push.
+Then set the Init tag's **Client ID (optional – set before init)** to `{{Conviva – Client ID}}` and use either **Conviva – All Pages (Init)** or **Conviva – Init (Custom Event)**; clientId will come from the URL when present, otherwise from the dataLayer push.
 
 **Data Layer Variable** configuration: set **Data Layer Variable Name** to the key (e.g. `convivaEventName`). Version: 2.
 
-**Custom Event – avoiding merged data:** GTM merges each dataLayer push into a single state. If you fire multiple `conviva_customEvent` pushes (e.g. one from a setTimeout and one from a button), the **Data Layer Variable** for `convivaEventData` can return the **merged** object (e.g. both `performanceTiming` and `button` in one payload). To send only the **current** push’s event name and data, use these **JavaScript Variables** instead of the Data Layer Variables for the Custom Event tag:
+**Custom Event – avoiding merged data:** GTM merges each dataLayer push into a single state. If you fire multiple `conviva_customEvent` pushes (e.g. one from a setTimeout and one from a button), the **Data Layer Variable** for `convivaEventData` can return the **merged** object (e.g. both `performanceTiming` and `button` in one payload). To send only the **current** push's event name and data, use these **JavaScript Variables** instead of the Data Layer Variables for the Custom Event tag:
 
 | Variable Name | Type | Purpose |
 |---------------|------|---------|
 | **Conviva – Custom Event Name (from last push)** | Custom JavaScript | Returns `convivaEventName` from the most recent dataLayer entry with `event === 'conviva_customEvent'`. |
-| **Conviva – Custom Event Data (from last push)** | Custom JavaScript | Returns `convivaEventData` from that same push (only the current event’s payload). |
+| **Conviva – Custom Event Data (from last push)** | Custom JavaScript | Returns `convivaEventData` from that same push (only the current event's payload). |
 
 **Custom JavaScript** for **Conviva – Custom Event Name (from last push):**
 
@@ -86,7 +94,7 @@ function() {
 }
 ```
 
-In the **Conviva – Custom Event** tag, set Event Name → `{{Conviva – Custom Event Name (from last push)}}` and Event Data Object (variable) → `{{Conviva – Custom Event Data (from last push)}}` so each firing sends only that push’s data.
+In the **Conviva – Custom Event** tag, set Event name → `{{Conviva – Custom Event Name (from last push)}}` and Event data object (variable) → `{{Conviva – Custom Event Data (from last push)}}` so each firing sends only that push's data.
 
 ---
 
@@ -117,23 +125,23 @@ Create one tag per row. Tag type: **Conviva DPI JS SDK** (after importing the te
 
 > **Pre-init queue (SDK v2.0.0+):** Tags that fire before Init is complete are automatically buffered and replayed once initialization finishes — no events are lost. Using **Initialization – All Pages** is still recommended as best practice to minimize queue time. On v1.5.5, Init must fire first — tags before Init will fail.
 
-| Tag Name | Tag Type (dropdown) | Key fields → Variable / Value | Trigger |
+| Tag Name | Tag type (dropdown) | Key fields → Variable / Value | Trigger |
 |----------|---------------------|------------------------------|---------|
-| **Conviva – Init** | Initialize (init) | **Script source:** Conviva-hosted (version dropdown) or Customer-hosted (Script URL). **Replay:** If "Init with Cohort Replay" is enabled, **Replay script source:** Conviva-hosted (version) or Customer-hosted (Replay script URL). Other fields: Conviva Customer Key, App ID, App Version, (optional) User ID, (optional) **Client ID** → `{{Conviva – Client ID}}`. With **All Pages** trigger, pass clientId in URL: `?convivaClientId=...`; with **Custom Event** trigger, push `convivaClientId` in the same dataLayer push. | **Conviva – All Pages (Init)** (production) or **Conviva – Init (Custom Event)** (testing). |
-| **Conviva – Page View** | Track Page View (trackPageView) | Page Title Override → `{{Conviva – Page View Title}}` (or leave empty). | **Conviva – DOM Ready (Page View)** (MPA). For SPA/hybrid: **Conviva – DOM Ready (Page View)** and **Conviva – History Change (Page View)**. |
-| **Conviva – Custom Event** | Track Custom Event (trackCustomEvent) | Event Name → `{{Conviva – Custom Event Name}}`, Event Data Object (variable) → `{{Conviva – Custom Event Data}}`. | **Conviva – Custom Event** |
+| **Conviva – Init** | Initialize (init) | **Script source:** Conviva-hosted (version dropdown) or Customer-hosted (Script URL). **Replay:** If "Init with Cohort Replay" is enabled, **Replay script source:** Conviva-hosted (version) or Customer-hosted (Replay script URL). Other fields: Conviva customer key, App ID, App version, (optional) User ID (optional), **Client ID** → `{{Conviva – Client ID}}`. With **All Pages** trigger, pass clientId in URL: `?convivaClientId=...`; with **Custom Event** trigger, push `convivaClientId` in the same dataLayer push. | **Conviva – All Pages (Init)** (production) or **Conviva – Init (Custom Event)** (testing). |
+| **Conviva – Page View** | Track Page View (trackPageView) | Page title override → `{{Conviva – Page View Title}}` (or leave empty). | **Conviva – DOM Ready (Page View)** (MPA). For SPA/hybrid: **Conviva – DOM Ready (Page View)** and **Conviva – History Change (Page View)**. |
+| **Conviva – Custom Event** | Track Custom Event (trackCustomEvent) | Event name → `{{Conviva – Custom Event Name}}`, Event data object (variable) → `{{Conviva – Custom Event Data}}`. | **Conviva – Custom Event** |
 | **Conviva – Set User ID** | Set User ID (setUserId) | User ID → `{{Conviva – User ID}}` | **Conviva – Set User ID** |
-| **Conviva – Track Error** | Track Error (trackError) | Error Message → `{{Conviva – Error Message}}`, Filename → `{{Conviva – Error Filename}}` | **Conviva – Track Error** |
-| **Conviva – Revenue** | Track Revenue (trackRevenue) | Total order amount → `{{Conviva – Revenue Order Amount}}`, Order ID → `{{Conviva – Revenue Order ID}}`, Currency → `{{Conviva – Revenue Currency}}` (all required). Purchased items (variable) → `{{Conviva – Revenue Items List}}`, Revenue data object → `{{Conviva – Revenue Data}}` (optional). | **Conviva – Revenue** |
-| **Conviva – Set Custom Tags** | Set Custom Tags (setCustomTags) | **Custom Tags (variable)** → `{{Conviva – Custom Tags}}` (object from dataLayer). Optionally add rows in the **table**; variable and table are merged. See "Set Custom Tags – explained" below. | **Conviva – Set Custom Tags** |
-| **Conviva – Unset Custom Tags** | Unset Custom Tags (unsetCustomTags) | Tag Keys to Unset → `{{Conviva – Unset Tag Keys}}` | **Conviva – Unset Custom Tags** |
+| **Conviva – Track Error** | Track Error (trackError) | Error message → `{{Conviva – Error Message}}`, Filename (optional) → `{{Conviva – Error Filename}}`, Error object (variable) → `{{Conviva – Error Object}}`. | **Conviva – Track Error** |
+| **Conviva – Revenue** | Track Revenue (trackRevenue) | **Required:** Total order amount → `{{Conviva – Revenue Order Amount}}`, Order ID (transaction ID) → `{{Conviva – Revenue Order ID}}`, Currency → `{{Conviva – Revenue Currency}}`. **Optional:** Tax amount → `{{Conviva – Revenue Tax Amount}}`, Shipping cost → `{{Conviva – Revenue Shipping Cost}}`, Discount / coupon value → `{{Conviva – Revenue Discount}}`, Cart size (number of items) → `{{Conviva – Revenue Cart Size}}`, Payment method → `{{Conviva – Revenue Payment Method}}`, Payment provider → `{{Conviva – Revenue Payment Provider}}`, Order status → `{{Conviva – Revenue Order Status}}`, Purchased items (variable) → `{{Conviva – Revenue Items List}}`, Revenue data object (variable) → `{{Conviva – Revenue Data}}`. | **Conviva – Revenue** |
+| **Conviva – Set Custom Tags** | Set Custom Tags (setCustomTags) | **Custom tags (variable)** → `{{Conviva – Custom Tags}}` (object from dataLayer). Optionally add rows in the **table**; variable and table are merged. See "Set Custom Tags – explained" below. | **Conviva – Set Custom Tags** |
+| **Conviva – Unset Custom Tags** | Unset Custom Tags (unsetCustomTags) | Tag keys to unset → `{{Conviva – Unset Tag Keys}}` | **Conviva – Unset Custom Tags** |
 
 #### Script source (main SDK and Cohort Replay)
 
 - **Main SDK:** **Script source** = Conviva-hosted (recommended) or Customer-hosted. When Customer-hosted, set **Script URL** to the full URL of `convivaAppTracker.js`.
 - **Cohort Replay** (when "Init with Cohort Replay" is checked): **Replay script source** = Conviva-hosted (recommended) or Customer-hosted. When Customer-hosted, set **Replay script URL** to the full URL of your replay bundle (e.g. `conviva-replay.umd.min.js`).
 
-> **Customer-hosted permissions:** The template’s `inject_script` permission only whitelists `*.conviva.com` domains. If you host the DPI SDK or Cohort Replay script on a non-Conviva domain, you must add your domain to the template’s **Permissions → Injects scripts** list in the GTM Template Editor. Without this, GTM will block the script from loading.
+> **Customer-hosted permissions:** The template's `inject_script` permission only whitelists `*.conviva.com` domains. If you host the DPI SDK or Cohort Replay script on a non-Conviva domain, you must add your domain to the template's **Permissions → Injects scripts** list in the GTM Template Editor. Without this, GTM will block the script from loading.
 
 #### Cohort Replay
 
@@ -147,28 +155,28 @@ Check **Init with Cohort Replay** in the Init tag to load and initialize the [Co
 
 Per the [Conviva JS SDK](https://github.com/Conviva/conviva-js-script-appanalytics), **setClientId** can be used to sync clientId from another instance (e.g. mobile app or subdomain). In the **Conviva – Init** tag, use the optional **Client ID (optional – set before init)** field. Set it to a variable (e.g. from a cookie or dataLayer) when you want to reuse a client ID; leave empty to let the SDK generate one.
 
-#### Device Metadata (optional)
+#### Device metadata (optional)
 
-Expand the **Device Metadata** group in the Init tag to pass device information. All fields are optional.
+Expand the **Device metadata** group in the Init tag to pass device information. All fields are optional.
 
 | Field | Example Values |
 |-------|----------------|
-| Device Brand | `Apple`, `Samsung SmartTV` |
-| Device Manufacturer | `Samsung`, `Apple` |
-| Device Model | `iPhone 6 Plus`, `MacBookPro` |
-| Device Type | Dropdown: Desktop, Mobile, Tablet, Smart TV, Games Console, Set Top Box, Vehicle, Other |
-| Device Version | `NAForMac` |
-| OS Name | `MAC`, `WINDOWS`, `LINUX`, `IOS`, `ANDROID` |
-| OS Version | `10.13.6`, `8.1` |
-| Device Category | Dropdown: WEB, AND, APL, CHR, LGTV, SAMSUNGTV, TV, STB, PS, XB, RK, etc. |
-| Framework Name | `Web` |
-| Framework Version | `1.0.0` |
+| Device brand | `Apple`, `Samsung SmartTV` |
+| Device manufacturer | `Samsung`, `Apple` |
+| Device model | `iPhone 6 Plus`, `MacBookPro` |
+| Device type | Dropdown: Desktop, Mobile, Tablet, Smart TV, Games Console, Set Top Box, Vehicle, Other |
+| Device version | `NAForMac` |
+| Operating system name | `MAC`, `WINDOWS`, `LINUX`, `IOS`, `ANDROID` |
+| Operating system version | `10.13.6`, `8.1` |
+| Device category | Dropdown: WEB, AND, APL, CHR, LGTV, SAMSUNGTV, TV, STB, PS, XB, RK, etc. |
+| Framework name | `Web` |
+| Framework version | `1.0.0` |
 
 #### Set Custom Tags – explained
 
-- Use the **Conviva – Custom Tags** variable: create a Data Layer Variable with key `convivaCustomTags` (already in the Variables table). In the tag, set **Custom Tags (variable)** to `{{Conviva – Custom Tags}}`. Your page pushes `conviva_setCustomTags` with `convivaCustomTags: { "key1": "value1", ... }` and the tag sends that object to the tracker.
+- Use the **Conviva – Custom Tags** variable: create a Data Layer Variable with key `convivaCustomTags` (already in the Variables table). In the tag, set **Custom tags (variable)** to `{{Conviva – Custom Tags}}`. Your page pushes `conviva_setCustomTags` with `convivaCustomTags: { "key1": "value1", ... }` and the tag sends that object to the tracker.
 - You can also use the **table** for fixed key/value pairs. If both the variable and the table are set, they are merged (variable keys override table keys for the same name).
-- **Testing:** Push `event: 'conviva_setCustomTags'` and `convivaCustomTags: { env: 'test' }` from your page; in the tag select **Custom Tags (variable)** → `{{Conviva – Custom Tags}}` and fire on **Conviva – Set Custom Tags**.
+- **Testing:** Push `event: 'conviva_setCustomTags'` and `convivaCustomTags: { env: 'test' }` from your page; in the tag select **Custom tags (variable)** → `{{Conviva – Custom Tags}}` and fire on **Conviva – Set Custom Tags**.
 
 
 ---
@@ -181,8 +189,8 @@ Push these from your page so the triggers above fire and variables are read from
 |-------------------------------------|--------------------------------------------|
 | `conviva_customEvent` | `convivaEventName`, `convivaEventData` |
 | `conviva_setUserId` | `convivaUserId` |
-| `conviva_trackError` | `convivaErrorMessage`, `convivaErrorFilename` (optional) |
-| `conviva_revenue` | `convivaRevenueOrderAmount`, `convivaRevenueOrderId`, `convivaRevenueCurrency` (all required), `convivaRevenueItems` (array), optionally `convivaRevenueData` (object) |
+| `conviva_trackError` | `convivaErrorMessage`, `convivaErrorFilename` (optional), `convivaErrorObject` (optional JS Error) |
+| `conviva_revenue` | `convivaRevenueOrderAmount`, `convivaRevenueOrderId`, `convivaRevenueCurrency` (required); `convivaRevenueTaxAmount`, `convivaRevenueShippingCost`, `convivaRevenueDiscount`, `convivaRevenueCartSize`, `convivaRevenuePaymentMethod`, `convivaRevenuePaymentProvider`, `convivaRevenueOrderStatus`, `convivaRevenueItems` (array), `convivaRevenueData` (object) (all optional) |
 | `conviva_setCustomTags` | `convivaCustomTags` (object) |
 | `conviva_unsetCustomTags` | `convivaUnsetTagKeys` (string or array) |
 
@@ -197,16 +205,38 @@ window.dataLayer.push({
 });
 ```
 
-**Example – Revenue:**
+**Example – Revenue (required fields only):**
 
 ```javascript
 window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({
   event: 'conviva_revenue',
-  convivaRevenueOrderAmount: '99.99',
+  convivaRevenueOrderAmount: 99.99,
+  convivaRevenueOrderId: 'ord_12345',
+  convivaRevenueCurrency: 'USD'
+});
+```
+
+**Example – Revenue (with optional fields):**
+
+```javascript
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+  event: 'conviva_revenue',
+  convivaRevenueOrderAmount: 99.99,
   convivaRevenueOrderId: 'ord_12345',
   convivaRevenueCurrency: 'USD',
-  convivaRevenueItems: [{ productId: 'p1', name: 'Product 1', quantity: '2', unitPrice: '49.99' }]
+  convivaRevenueTaxAmount: 8.99,
+  convivaRevenueShippingCost: 5.00,
+  convivaRevenueDiscount: 10.00,
+  convivaRevenueCartSize: 2,
+  convivaRevenuePaymentMethod: 'card',
+  convivaRevenuePaymentProvider: 'Stripe',
+  convivaRevenueOrderStatus: 'completed',
+  convivaRevenueItems: [
+    { productId: 'p1', name: 'Product 1', quantity: 1, unitPrice: 49.99 },
+    { productId: 'p2', name: 'Product 2', quantity: 1, unitPrice: 49.99 }
+  ]
 });
 ```
 
