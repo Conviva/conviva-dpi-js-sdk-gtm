@@ -177,9 +177,9 @@ Loads the SDK and initializes tracking. Fire **once per page**.
 | Init with Cohort Replay | When checked, loads [Conviva Session Replay](https://github.com/Conviva/conviva-js-replay) before the main SDK. |
 | User ID | Set if known at init time (e.g. `{{Conviva -- User ID}}`). Otherwise use the Set User ID tag later. |
 | Client ID | Sync `clientId` from another instance (mobile app, subdomain). Leave empty to auto-generate. |
-| Default Custom Tags | Key/value table applied via `setCustomTags` after init. |
+| Default custom tags | Key/value table applied via `setCustomTags` after init. |
 | Enable Client ID in cookies | Share `clientId` across subdomains via cookies. |
-| Device Metadata | See [Device Metadata](#device-metadata) in Advanced Configuration. |
+| Device metadata | See [Device Metadata](#device-metadata) in Advanced Configuration. |
 
 #### Trigger
 
@@ -214,9 +214,9 @@ Sends a named custom event with optional data.
 
 | Field | Value |
 |-------|-------|
-| Event Name* | `{{Conviva -- Custom Event Name}}` |
-| Event Data (table) | Optional fixed key/value pairs |
-| Event Data Object (variable) | `{{Conviva -- Custom Event Data}}` |
+| Event name* | `{{Conviva -- Custom Event Name}}` |
+| Event data (table) | Optional fixed key/value pairs |
+| Event data object (variable) | `{{Conviva -- Custom Event Data}}` |
 
 If both the table and the variable are set, they are merged. Variable keys take priority.
 
@@ -235,6 +235,57 @@ dataLayer.push({
   convivaEventData: { buttonId: 'cta-hero', section: 'homepage' }
 });
 ```
+
+> **Data merging note:** If you push multiple `conviva_customEvent` events on the same page, GTM's Data Layer Variables may return merged/stale data from a previous push. See [Avoiding Merged Event Data](#avoiding-merged-event-data) in Advanced Configuration to resolve this.
+
+#### Forwarding existing events to Conviva
+
+If your site already pushes events to GA4 or another analytics tool (e.g. `purchase`, `add_to_cart`, `video_play`) and you want to forward them to Conviva without adding a separate `conviva_customEvent` push, use the following approach.
+
+**Step 1 – Create a Custom JavaScript variable: `Conviva -- Current Event Data`**
+
+This variable reads data directly from the triggering push, bypassing GTM's merged composite state:
+
+```javascript
+function() {
+  var dl = window.dataLayer || [];
+  var skip = { 'event': true, 'gtm.uniqueEventId': true, 'gtm.start': true };
+  for (var i = dl.length - 1; i >= 0; i--) {
+    var push = dl[i];
+    if (push && typeof push.event === 'string' && push.event.indexOf('gtm.') !== 0) {
+      var data = {};
+      for (var key in push) {
+        if (!skip[key] && push.hasOwnProperty(key)) data[key] = push[key];
+      }
+      return data;
+    }
+  }
+  return {};
+}
+```
+
+**Step 2 – Configure the Conviva Custom Event tag**
+
+| Field | Value |
+|-------|-------|
+| Event name* | `{{Event}}` (GTM built-in — always returns the current event name) |
+| Event data object (variable) | `{{Conviva -- Current Event Data}}` |
+
+**Step 3 – Choose a trigger strategy**
+
+**Option A: Piggyback on existing triggers (recommended)**
+Add the Conviva Custom Event tag to your existing GA4/analytics triggers. When GA4 fires on `purchase`, the Conviva tag fires on the same trigger — `{{Event}}` returns `purchase` automatically. No new dataLayer pushes or trigger configurations required.
+
+**Option B: Regex catch-all trigger**
+Create a new Custom Event trigger, enable **Use regex matching**, and set the event name to cover all events you want to forward:
+
+```
+purchase|add_to_cart|video_play|checkout_complete
+```
+
+One trigger and one Conviva tag handle all matched event types.
+
+> **Why not use Data Layer Variables?** GTM merges all `dataLayer.push()` calls into a single composite state. A Data Layer Variable reading a key that appears in multiple pushes returns the last-written value — which may be from a different, earlier event. The `{{Conviva -- Current Event Data}}` Custom JS variable reads directly from the individual push object at fire time, so each firing gets only that push's own keys.
 
 ---
 
@@ -339,8 +390,8 @@ Sets global key/value tags applied to all subsequent events.
 
 | Field | Description |
 |-------|-------------|
-| Custom Tags (table) | Fixed key/value pairs |
-| Custom Tags (variable) | `{{Conviva -- Custom Tags}}` |
+| Custom tags (table) | Fixed key/value pairs |
+| Custom tags (variable) | `{{Conviva -- Custom Tags}}` |
 
 If both are set, they are merged. Variable keys take priority.
 
@@ -367,7 +418,7 @@ Removes previously set custom tag keys.
 
 | Field | Description |
 |-------|-------------|
-| Tag Keys to Unset* | Comma-separated list of keys, or a GTM variable returning a string/array. Use `{{Conviva -- Unset Tag Keys}}`. |
+| Tag keys to unset* | Comma-separated list of keys, or a GTM variable returning a string/array. Use `{{Conviva -- Unset Tag Keys}}`. |
 
 #### Trigger
 
@@ -525,7 +576,49 @@ function() {
 }
 ```
 
-Then in your Custom Event tag, set Event Name to `{{Conviva -- Custom Event Name (from last push)}}` and Event Data Object to `{{Conviva -- Custom Event Data (from last push)}}`.
+Then in your Custom Event tag, set Event name to `{{Conviva -- Custom Event Name (from last push)}}` and Event data object (variable) to `{{Conviva -- Custom Event Data (from last push)}}`.
+
+### Forwarding Existing Events to Conviva
+
+If your site already pushes events to GA4 or another analytics tool and you want to forward them to Conviva without changing your existing dataLayer pushes, use one Conviva Custom Event tag with GTM's built-in `{{Event}}` variable — no per-event configuration needed.
+
+**Create a Custom JavaScript variable: `Conviva -- Current Event Data`**
+
+```javascript
+function() {
+  var dl = window.dataLayer || [];
+  var skip = { 'event': true, 'gtm.uniqueEventId': true, 'gtm.start': true };
+  for (var i = dl.length - 1; i >= 0; i--) {
+    var push = dl[i];
+    if (push && typeof push.event === 'string' && push.event.indexOf('gtm.') !== 0) {
+      var data = {};
+      for (var key in push) {
+        if (!skip[key] && push.hasOwnProperty(key)) data[key] = push[key];
+      }
+      return data;
+    }
+  }
+  return {};
+}
+```
+
+This variable scans backwards through `window.dataLayer`, skips GTM internal events (`gtm.*`), and returns only the keys from the most recent user push — never stale merged data.
+
+**Configure the Conviva Custom Event tag:**
+
+| Field | Value |
+|-------|-------|
+| Event name* | `{{Event}}` (GTM built-in — returns the name of the currently firing event) |
+| Event data object (variable) | `{{Conviva -- Current Event Data}}` |
+
+**Trigger options:**
+
+| Option | How |
+|--------|-----|
+| **Piggyback on existing triggers** (recommended) | Add the Conviva Custom Event tag to your existing GA4/analytics triggers. No new triggers or dataLayer pushes needed. `{{Event}}` picks up the event name automatically. |
+| **Regex catch-all trigger** | Create a new Custom Event trigger with **Use regex matching** enabled. Set event name to e.g. `purchase\|add_to_cart\|video_play`. One trigger covers all matched events. |
+
+> **Will I get all previous events replaying?** No. Custom Event triggers fire exactly once per `dataLayer.push()`, at the time of that push. Previous events are already processed and do not re-fire when a new event is pushed.
 
 ### Device Metadata
 
@@ -533,16 +626,16 @@ Expand the **Device Metadata** group in the Init tag to pass device information.
 
 | Field | Example Values |
 |-------|---------------|
-| Device Brand | `Apple`, `Samsung SmartTV` |
-| Device Manufacturer | `Samsung`, `Apple` |
-| Device Model | `iPhone 6 Plus`, `MacBookPro` |
-| Device Type | Dropdown: Desktop, Mobile, Tablet, Smart TV, Games Console, Set Top Box, Vehicle, Other |
-| Device Version | `NAForMac` |
-| OS Name | `MAC`, `WINDOWS`, `LINUX`, `IOS`, `ANDROID` |
-| OS Version | `10.13.6`, `8.1` |
-| Device Category | Dropdown: WEB, AND, APL, CHR, LGTV, SAMSUNGTV, TV, STB, PS, XB, RK, etc. |
-| Framework Name | `Web` |
-| Framework Version | `1.0.0` |
+| Device brand | `Apple`, `Samsung SmartTV` |
+| Device manufacturer | `Samsung`, `Apple` |
+| Device model | `iPhone 6 Plus`, `MacBookPro` |
+| Device type | Dropdown: Desktop, Mobile, Tablet, Smart TV, Games Console, Set Top Box, Vehicle, Other |
+| Device version | `NAForMac` |
+| Operating system name | `MAC`, `WINDOWS`, `LINUX`, `IOS`, `ANDROID` |
+| Operating system version | `10.13.6`, `8.1` |
+| Device category | Dropdown: WEB, AND, APL, CHR, LGTV, SAMSUNGTV, TV, STB, PS, XB, RK, etc. |
+| Framework name | `Web` |
+| Framework version | `1.0.0` |
 
 ### Tag Sequencing
 
