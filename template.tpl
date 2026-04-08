@@ -251,6 +251,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "selectItems": [
           {
+            "displayValue": "v2.0.2",
+            "value": "v2.0.2"
+          },
+          {
             "displayValue": "v2.0.1",
             "value": "v2.0.1"
           },
@@ -264,7 +268,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "displayName": "Script version",
-        "defaultValue": "v2.0.1",
+        "defaultValue": "v2.0.2",
         "simpleValueType": true,
         "name": "scriptVersion",
         "type": "SELECT",
@@ -282,7 +286,7 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "scriptVersionCustom",
         "type": "TEXT",
-        "valueHint": "Overrides dropdown when set (e.g. v2.0.1, v2.0.0)",
+        "valueHint": "Overrides dropdown when set (e.g. v2.0.2, v2.0.1)",
         "enablingConditions": [
           {
             "paramName": "scriptSource",
@@ -360,6 +364,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "selectItems": [
           {
+            "displayValue": "v1.0.3",
+            "value": "v1.0.3"
+          },
+          {
             "displayValue": "v1.0.2",
             "value": "v1.0.2"
           },
@@ -369,7 +377,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "displayName": "Replay script version",
-        "defaultValue": "v1.0.2",
+        "defaultValue": "v1.0.3",
         "simpleValueType": true,
         "name": "replayScriptVersion",
         "type": "SELECT",
@@ -387,7 +395,7 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "replayScriptVersionCustom",
         "type": "TEXT",
-        "valueHint": "Overrides dropdown when set (e.g. v1.0.2, v1.0.1)",
+        "valueHint": "Overrides dropdown when set (e.g. v1.0.3, v1.0.2)",
         "enablingConditions": [
           {
             "paramName": "replayScriptSource",
@@ -1129,12 +1137,12 @@ const Object = require('Object');
 // Constants – Conviva script creates window.apptracker; Conviva-hosted URL built from version (sensor.conviva.com)
 const CONVIVA_SCRIPT_BASE = 'https://sensor.conviva.com/dpi/releases/';
 const CONVIVA_SCRIPT_FILE = '/convivaAppTracker.js';
-const DEFAULT_VERSION = 'v2.0.1';
+const DEFAULT_VERSION = 'v2.0.2';
 const LOG_PREFIX = '[Conviva DPI JS SDK / GTM] ';
 // Cohort Replay – must load and init before main SDK (same Conviva CDN pattern)
 const REPLAY_SCRIPT_BASE = 'https://sensor.conviva.com/replay/releases/';
 const REPLAY_SCRIPT_FILE = '/conviva-replay.umd.min.js';
-const REPLAY_DEFAULT_VERSION = 'v1.0.2';
+const REPLAY_DEFAULT_VERSION = 'v1.0.3';
 const REPLAY_NAMESPACE = 'ConvivaReplay';
 
 // Ensures apptracker queue stub and GlobalConvivaNamespace exist (sandbox: use createQueue/createArgumentsQueue only).
