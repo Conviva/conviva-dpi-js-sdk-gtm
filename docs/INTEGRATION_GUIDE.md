@@ -235,7 +235,7 @@ dataLayer.push({
   convivaEventData: { buttonId: 'cta-hero', section: 'homepage' }
 });
 ```
-### Avoiding Merged Event Data
+#### Avoiding Merged Event Data
 
 GTM merges all `dataLayer.push()` calls into one global state. If you push multiple custom events rapidly, variables may return stale data from a previous push. To always read the most recent push, use **Custom JavaScript** variables instead of Data Layer Variables for the Custom Event tag:
 
