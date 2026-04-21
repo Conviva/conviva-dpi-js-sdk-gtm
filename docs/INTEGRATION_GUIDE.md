@@ -242,20 +242,33 @@ dataLayer.push({
 
 If your site already pushes events to GA4 or another analytics tool (e.g. `purchase`, `add_to_cart`, `video_play`) and you want to forward them to Conviva without adding a separate `conviva_customEvent` push, use the following approach.
 
-**Step 1 – Create a Custom JavaScript variable: `Conviva -- Current Event Data`**
+**Step 1 – Create two variables**
 
-This variable reads data directly from the triggering push, bypassing GTM's merged composite state:
+**1. `Conviva -- Event ID`** (Data Layer Variable):
+
+| Setting | Value |
+|---------|-------|
+| Type | Data Layer Variable |
+| Data Layer Variable Name | `gtm.uniqueEventId` |
+| Data Layer Version | Version 2 |
+
+GTM assigns a unique ID to every `dataLayer.push()`. This variable returns the ID of the event currently being processed.
+
+**2. `Conviva -- Current Event Data`** (Custom JavaScript):
 
 ```javascript
 function() {
   var dl = window.dataLayer || [];
-  var skip = { 'event': true, 'gtm.uniqueEventId': true, 'gtm.start': true };
+  var eid = {{Conviva -- Event ID}};
   for (var i = dl.length - 1; i >= 0; i--) {
     var push = dl[i];
-    if (push && typeof push.event === 'string' && push.event.indexOf('gtm.') !== 0) {
+    if (!push) continue;
+    if (eid ? push['gtm.uniqueEventId'] === eid
+            : typeof push.event === 'string' && push.event.indexOf('gtm.') !== 0) {
       var data = {};
       for (var key in push) {
-        if (!skip[key] && push.hasOwnProperty(key)) data[key] = push[key];
+        if (key !== 'event' && key.indexOf('gtm.') !== 0 && push.hasOwnProperty(key))
+          data[key] = push[key];
       }
       return data;
     }
@@ -263,6 +276,12 @@ function() {
   return {};
 }
 ```
+
+> **Custom dataLayer name:** If your GTM snippet uses a custom name (e.g. `gtmDataLayer`), change `window.dataLayer` to `window.gtmDataLayer` in the variable above. The name is the 4th argument in your GTM embed snippet: `})(window,document,'script','<NAME>','GTM-XXXXX');`
+
+**Why `gtm.uniqueEventId` matching?**
+
+Each `dataLayer.push()` gets a unique ID from GTM. Matching on this ID finds the **exact push** that triggered the tag. Previous approaches scanned backwards for "the last non-GTM event", which fails when multiple tags push utility events during processing or when the same event name fires rapidly — the scan returns the wrong push's data. The `gtm.uniqueEventId` approach has no known failure mode. If the ID is unavailable (e.g. non-GTM environment), the variable falls back to the legacy scan automatically.
 
 **Step 2 – Configure the Conviva Custom Event tag**
 
@@ -273,19 +292,19 @@ function() {
 
 **Step 3 – Choose a trigger strategy**
 
+> **CRITICAL:** The trigger **must** fire only on the specific events you want to forward. Do **not** use a catch-all trigger that fires on every event. GTM tags and internal logic push utility events to the dataLayer during processing (e.g. `clear ecommerce`, `restore ecommerce`, `get top-level Page Hostname`). A catch-all trigger would fire the Conviva tag on these utility events too, sending wrong event names and irrelevant data to Conviva.
+
 **Option A: Piggyback on existing triggers (recommended)**
 Add the Conviva Custom Event tag to your existing GA4/analytics triggers. When GA4 fires on `purchase`, the Conviva tag fires on the same trigger — `{{Event}}` returns `purchase` automatically. No new dataLayer pushes or trigger configurations required.
 
-**Option B: Regex catch-all trigger**
-Create a new Custom Event trigger, enable **Use regex matching**, and set the event name to cover all events you want to forward:
+**Option B: Regex trigger (dedicated)**
+Create a new Custom Event trigger, enable **Use regex matching**, and set the event name to cover only the specific events you want to forward:
 
 ```
 purchase|add_to_cart|video_play|checkout_complete
 ```
 
-One trigger and one Conviva tag handle all matched event types.
-
-> **Why not use Data Layer Variables?** GTM merges all `dataLayer.push()` calls into a single composite state. A Data Layer Variable reading a key that appears in multiple pushes returns the last-written value — which may be from a different, earlier event. The `{{Conviva -- Current Event Data}}` Custom JS variable reads directly from the individual push object at fire time, so each firing gets only that push's own keys.
+One trigger and one Conviva tag handle all matched event types. Add or remove event names from the regex as needed.
 
 ---
 
@@ -580,45 +599,7 @@ Then in your Custom Event tag, set Event name to `{{Conviva -- Custom Event Name
 
 ### Forwarding Existing Events to Conviva
 
-If your site already pushes events to GA4 or another analytics tool and you want to forward them to Conviva without changing your existing dataLayer pushes, use one Conviva Custom Event tag with GTM's built-in `{{Event}}` variable — no per-event configuration needed.
-
-**Create a Custom JavaScript variable: `Conviva -- Current Event Data`**
-
-```javascript
-function() {
-  var dl = window.dataLayer || [];
-  var skip = { 'event': true, 'gtm.uniqueEventId': true, 'gtm.start': true };
-  for (var i = dl.length - 1; i >= 0; i--) {
-    var push = dl[i];
-    if (push && typeof push.event === 'string' && push.event.indexOf('gtm.') !== 0) {
-      var data = {};
-      for (var key in push) {
-        if (!skip[key] && push.hasOwnProperty(key)) data[key] = push[key];
-      }
-      return data;
-    }
-  }
-  return {};
-}
-```
-
-This variable scans backwards through `window.dataLayer`, skips GTM internal events (`gtm.*`), and returns only the keys from the most recent user push — never stale merged data.
-
-**Configure the Conviva Custom Event tag:**
-
-| Field | Value |
-|-------|-------|
-| Event name* | `{{Event}}` (GTM built-in — returns the name of the currently firing event) |
-| Event data object (variable) | `{{Conviva -- Current Event Data}}` |
-
-**Trigger options:**
-
-| Option | How |
-|--------|-----|
-| **Piggyback on existing triggers** (recommended) | Add the Conviva Custom Event tag to your existing GA4/analytics triggers. No new triggers or dataLayer pushes needed. `{{Event}}` picks up the event name automatically. |
-| **Regex catch-all trigger** | Create a new Custom Event trigger with **Use regex matching** enabled. Set event name to e.g. `purchase\|add_to_cart\|video_play`. One trigger covers all matched events. |
-
-> **Will I get all previous events replaying?** No. Custom Event triggers fire exactly once per `dataLayer.push()`, at the time of that push. Previous events are already processed and do not re-fire when a new event is pushed.
+If your site already pushes events to GA4 or another analytics tool and you want to forward them to Conviva without changing your existing dataLayer pushes, see [Forwarding existing events to Conviva](#forwarding-existing-events-to-conviva) in the Track Custom Event section for complete setup instructions (variables, tag configuration, and trigger strategy).
 
 ### Device Metadata
 
