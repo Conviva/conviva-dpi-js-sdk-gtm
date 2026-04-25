@@ -235,8 +235,37 @@ dataLayer.push({
   convivaEventData: { buttonId: 'cta-hero', section: 'homepage' }
 });
 ```
+#### Avoiding Merged Event Data
 
-> **Data merging note:** If you push multiple `conviva_customEvent` events on the same page, GTM's Data Layer Variables may return merged/stale data from a previous push. See [Avoiding Merged Event Data](#avoiding-merged-event-data) in Advanced Configuration to resolve this.
+GTM merges all `dataLayer.push()` calls into one global state. If you push multiple custom events rapidly, variables may return stale data from a previous push. To always read the most recent push, use **Custom JavaScript** variables instead of Data Layer Variables for the Custom Event tag:
+
+**Conviva -- Custom Event Name (from last push):**
+
+```javascript
+function() {
+  var dl = window.dataLayer || [];
+  for (var i = dl.length - 1; i >= 0; i--) {
+    if (dl[i].event === 'conviva_customEvent' && dl[i].convivaEventName)
+      return dl[i].convivaEventName;
+  }
+  return '';
+}
+```
+
+**Conviva -- Custom Event Data (from last push):**
+
+```javascript
+function() {
+  var dl = window.dataLayer || [];
+  for (var i = dl.length - 1; i >= 0; i--) {
+    if (dl[i].event === 'conviva_customEvent' && dl[i].convivaEventData != null)
+      return dl[i].convivaEventData;
+  }
+  return {};
+}
+```
+
+Then in your Custom Event tag, set Event name to `{{Conviva -- Custom Event Name (from last push)}}` and Event data object (variable) to `{{Conviva -- Custom Event Data (from last push)}}`.
 
 #### Forwarding existing events to Conviva
 
@@ -567,35 +596,7 @@ Set the Init tag's **Client ID** field to `{{Conviva -- Client ID}}`.
 
 ### Avoiding Merged Event Data
 
-GTM merges all `dataLayer.push()` calls into one global state. If you push multiple custom events rapidly, variables may return stale data from a previous push. To always read the most recent push, use **Custom JavaScript** variables instead of Data Layer Variables for the Custom Event tag:
-
-**Conviva -- Custom Event Name (from last push):**
-
-```javascript
-function() {
-  var dl = window.dataLayer || [];
-  for (var i = dl.length - 1; i >= 0; i--) {
-    if (dl[i].event === 'conviva_customEvent' && dl[i].convivaEventName)
-      return dl[i].convivaEventName;
-  }
-  return '';
-}
-```
-
-**Conviva -- Custom Event Data (from last push):**
-
-```javascript
-function() {
-  var dl = window.dataLayer || [];
-  for (var i = dl.length - 1; i >= 0; i--) {
-    if (dl[i].event === 'conviva_customEvent' && dl[i].convivaEventData != null)
-      return dl[i].convivaEventData;
-  }
-  return {};
-}
-```
-
-Then in your Custom Event tag, set Event name to `{{Conviva -- Custom Event Name (from last push)}}` and Event data object (variable) to `{{Conviva -- Custom Event Data (from last push)}}`.
+> **Data merging note:** If you push multiple `conviva_customEvent` events on the same page, GTM's Data Layer Variables may return merged/stale data from a previous push. See [Avoiding Merged Event Data](#avoiding-merged-event-data) in Advanced Configuration to resolve this.
 
 ### Forwarding Existing Events to Conviva
 
