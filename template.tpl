@@ -1326,7 +1326,7 @@ const runNonInit = function() {
   data.gtmOnSuccess();
 };
 
-// Build init config: appId, convivaCustomerKey, appVersion, optional enableClIdInCookies, optional deviceMetadata
+// Build init config: appId, convivaCustomerKey, appVersion, optional configs.enableClIdInCookies, optional deviceMetadata
 const buildInitConfig = function() {
   const config = {
     appId: data.appId,
@@ -1334,7 +1334,8 @@ const buildInitConfig = function() {
     appVersion: data.appVersion || undefined
   };
   if (data.enableClIdInCookies === true) {
-    config.enableClIdInCookies = true;
+    config.configs = config.configs || {};
+    config.configs.enableClIdInCookies = true;
   }
   const deviceMetadata = {};
   if (data.deviceBrand) deviceMetadata.DeviceBrand = data.deviceBrand;
