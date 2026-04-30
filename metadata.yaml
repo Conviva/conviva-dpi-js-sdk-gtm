@@ -4,7 +4,7 @@
 homepage: "https://www.conviva.ai"
 documentation: "https://github.com/Conviva/conviva-dpi-js-sdk-gtm"
 versions:
-  - sha: "ae4e92e5e2e7f0a34ed211c4d7107b54469fa24d"
+  - sha: "6499b88209cf93f39f10dcdc0bdcf6eefffec142"
     changeNotes: "Added support for DPI v2.1.0 and default-enabled cross-subdomain clientId sharing (enableClIdInCookies). Fixed enableClIdInCookies placement in the init payload so the option is honored at runtime. NOTE: container admins who had previously ticked Enable Client ID in cookies will start writing cookies for the first time after updating and republishing — the option was a silent no-op in earlier template versions. To opt out, untick the checkbox before republishing."
   - sha: "3ff91aa7e921a5d195c7631edab87f88aeaa30a2"
     changeNotes: "Added support for DPI v2.0.2 and Cohort Replay v1.0.3 with bug fixes for cohort replay reliability."
