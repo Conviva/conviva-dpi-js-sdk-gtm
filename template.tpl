@@ -2309,7 +2309,7 @@ scenarios:
     assertThat(initArg.configs).isEqualTo(undefined);
     assertThat(initArg.enableClIdInCookies).isEqualTo(undefined);
     assertApi('gtmOnSuccess').wasCalled();
-- name: Init with no version override uses DEFAULT_VERSION (v2.1.0) URL
+- name: Init with no version override uses DEFAULT_VERSION URL
   code: |-
     mockData.type = 'init';
     mockData.convivaCustomerKey = 'test_key';
