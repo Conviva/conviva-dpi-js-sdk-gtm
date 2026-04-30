@@ -2,6 +2,30 @@
 
 All notable changes to the Conviva DPI JS SDK GTM Template project are documented in this file.
 
+## [1.1.0] - 2026-04-30
+
+### Added
+
+- Support for **Conviva DPI JS SDK v2.1.0** in the Script version dropdown; v2.1.0 is now the default selection for new tags. `DEFAULT_VERSION` fallback constant bumped to `v2.1.0`.
+
+### Changed
+
+- **Enable Client ID in cookies** checkbox now defaults to `true` so new installs get cross-subdomain `clientId` continuity out of the box. Existing tags retain their saved value (GTM persists field values at tag-save time, so the default flip does not retroactively change existing configurations).
+
+### Fixed
+
+- `enableClIdInCookies` was being written at the top level of the `convivaAppTracker` init payload, but the SDK reads it from `configs.enableClIdInCookies`. Ticking the checkbox had no runtime effect — cross-subdomain `clientId` sharing never activated. The flag is now correctly nested under `configs`, matching the SDK contract documented in the `conviva-js-script-appanalytics` README.
+
+### Tests
+
+- Added 3 scenarios (38 total): regression test asserting `enableClIdInCookies` is nested under `configs` (and absent at top level); negative test asserting `configs` is omitted entirely when the checkbox is unticked; default-version test asserting the script URL resolves to v2.1.0 when no version override is set.
+
+## [1.0.1] - 2026-04-08
+
+### Added
+
+- Support for **Conviva DPI JS SDK v2.0.2** and **Cohort Replay v1.0.3** in their respective version dropdowns, with bug fixes for cohort replay reliability.
+
 ## [1.0.0] - Initial release
 
 ### Added

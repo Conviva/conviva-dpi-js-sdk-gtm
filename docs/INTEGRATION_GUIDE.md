@@ -178,7 +178,7 @@ Loads the SDK and initializes tracking. Fire **once per page**.
 | User ID | Set if known at init time (e.g. `{{Conviva -- User ID}}`). Otherwise use the Set User ID tag later. |
 | Client ID | Sync `clientId` from another instance (mobile app, subdomain). Leave empty to auto-generate. |
 | Default custom tags | Key/value table applied via `setCustomTags` after init. |
-| Enable Client ID in cookies | Share `clientId` across subdomains via cookies. |
+| Enable Client ID in cookies | Share `clientId` across subdomains via cookies. **Default: on** (since v1.1.0 of this template). Untick to keep `clientId` scoped to the current host only. |
 | Device metadata | See [Device Metadata](#device-metadata) in Advanced Configuration. |
 
 #### Trigger
@@ -573,7 +573,11 @@ To gate tracking on user consent, assign the Init tag to a consent-based trigger
 
 ### Cross-Subdomain Client ID
 
-Check **Enable Client ID in cookies** in the Init tag to share `clientId` across subdomains (e.g. `app.example.com` and `www.example.com`).
+The **Enable Client ID in cookies** checkbox in the Init tag shares `clientId` across subdomains (e.g. `app.example.com` and `www.example.com`).
+
+> **Default since template v1.1.0:** the checkbox is **on** for new tags. Existing tags created before v1.1.0 keep whatever value was previously saved (typically off — GTM persists field values at tag-save time, so the new default does not retroactively change existing configurations). To opt out for new tags, untick the box and republish the container.
+
+> **Customers upgrading from earlier template versions:** if your existing Init tag already had this box ticked but ran on a pre-v1.1.0 template, the option was a silent no-op (a bug fixed in v1.1.0). After updating the template and republishing the container, that flag will start being honored at runtime for the first time — i.e. cookies will start being written for cross-subdomain `clientId` sharing. If this is not desired, untick the box before republishing.
 
 ### Client ID from URL or dataLayer
 

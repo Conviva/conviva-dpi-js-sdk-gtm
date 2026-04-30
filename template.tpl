@@ -251,6 +251,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "selectItems": [
           {
+            "displayValue": "v2.1.0",
+            "value": "v2.1.0"
+          },
+          {
             "displayValue": "v2.0.2",
             "value": "v2.0.2"
           },
@@ -268,7 +272,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "displayName": "Script version",
-        "defaultValue": "v2.0.2",
+        "defaultValue": "v2.1.0",
         "simpleValueType": true,
         "name": "scriptVersion",
         "type": "SELECT",
@@ -286,7 +290,7 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "scriptVersionCustom",
         "type": "TEXT",
-        "valueHint": "Overrides dropdown when set (e.g. v2.0.2, v2.0.1)",
+        "valueHint": "Overrides dropdown when set (e.g. v2.1.0, v2.0.2)",
         "enablingConditions": [
           {
             "paramName": "scriptSource",
@@ -481,7 +485,7 @@ ___TEMPLATE_PARAMETERS___
     ]
   },
   {
-    "defaultValue": false,
+    "defaultValue": true,
     "simpleValueType": true,
     "name": "enableClIdInCookies",
     "checkboxText": "Enable Client ID in cookies (share clientId across subdomains)",
@@ -1137,7 +1141,7 @@ const Object = require('Object');
 // Constants – Conviva script creates window.apptracker; Conviva-hosted URL built from version (sensor.conviva.com)
 const CONVIVA_SCRIPT_BASE = 'https://sensor.conviva.com/dpi/releases/';
 const CONVIVA_SCRIPT_FILE = '/convivaAppTracker.js';
-const DEFAULT_VERSION = 'v2.0.2';
+const DEFAULT_VERSION = 'v2.1.0';
 const LOG_PREFIX = '[Conviva DPI JS SDK / GTM] ';
 // Cohort Replay – must load and init before main SDK (same Conviva CDN pattern)
 const REPLAY_SCRIPT_BASE = 'https://sensor.conviva.com/replay/releases/';
@@ -1326,7 +1330,7 @@ const runNonInit = function() {
   data.gtmOnSuccess();
 };
 
-// Build init config: appId, convivaCustomerKey, appVersion, optional enableClIdInCookies, optional deviceMetadata
+// Build init config: appId, convivaCustomerKey, appVersion, optional configs.enableClIdInCookies, optional deviceMetadata
 const buildInitConfig = function() {
   const config = {
     appId: data.appId,
@@ -1334,7 +1338,8 @@ const buildInitConfig = function() {
     appVersion: data.appVersion || undefined
   };
   if (data.enableClIdInCookies === true) {
-    config.enableClIdInCookies = true;
+    config.configs = config.configs || {};
+    config.configs.enableClIdInCookies = true;
   }
   const deviceMetadata = {};
   if (data.deviceBrand) deviceMetadata.DeviceBrand = data.deviceBrand;
@@ -2260,6 +2265,70 @@ scenarios:
 
     runCode(mockData);
     assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.1/conviva-replay.umd.min.js');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with enableClIdInCookies nests flag under configs
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.enableClIdInCookies = true;
+
+    var initArg;
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        if (cmd === 'convivaAppTracker') initArg = arg;
+      };
+    });
+
+    runCode(mockData);
+    assertThat(initArg).isDefined();
+    assertThat(initArg.configs).isDefined();
+    assertThat(initArg.configs.enableClIdInCookies).isEqualTo(true);
+    assertThat(initArg.enableClIdInCookies).isEqualTo(undefined);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with enableClIdInCookies=false omits configs object
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.enableClIdInCookies = false;
+
+    var initArg;
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        if (cmd === 'convivaAppTracker') initArg = arg;
+      };
+    });
+
+    runCode(mockData);
+    assertThat(initArg).isDefined();
+    assertThat(initArg.configs).isEqualTo(undefined);
+    assertThat(initArg.enableClIdInCookies).isEqualTo(undefined);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with no version override uses DEFAULT_VERSION (v2.1.0) URL
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.scriptVersion = '';
+    mockData.scriptVersionCustom = '';
+
+    var injectedUrl;
+    mock('injectScript', function(url, success, failure) {
+      injectedUrl = url;
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(injectedUrl).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.1.0/convivaAppTracker.js');
     assertApi('gtmOnSuccess').wasCalled();
 setup: const mockData = {};
 
