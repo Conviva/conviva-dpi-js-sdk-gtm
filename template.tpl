@@ -2266,6 +2266,70 @@ scenarios:
     runCode(mockData);
     assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.1/conviva-replay.umd.min.js');
     assertApi('gtmOnSuccess').wasCalled();
+- name: Init with enableClIdInCookies nests flag under configs
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.enableClIdInCookies = true;
+
+    var initArg;
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        if (cmd === 'convivaAppTracker') initArg = arg;
+      };
+    });
+
+    runCode(mockData);
+    assertThat(initArg).isDefined();
+    assertThat(initArg.configs).isDefined();
+    assertThat(initArg.configs.enableClIdInCookies).isEqualTo(true);
+    assertThat(initArg.enableClIdInCookies).isEqualTo(undefined);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with enableClIdInCookies=false omits configs object
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.enableClIdInCookies = false;
+
+    var initArg;
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        if (cmd === 'convivaAppTracker') initArg = arg;
+      };
+    });
+
+    runCode(mockData);
+    assertThat(initArg).isDefined();
+    assertThat(initArg.configs).isEqualTo(undefined);
+    assertThat(initArg.enableClIdInCookies).isEqualTo(undefined);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with no version override uses DEFAULT_VERSION (v2.1.0) URL
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.scriptVersion = '';
+    mockData.scriptVersionCustom = '';
+
+    var injectedUrl;
+    mock('injectScript', function(url, success, failure) {
+      injectedUrl = url;
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(injectedUrl).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.1.0/convivaAppTracker.js');
+    assertApi('gtmOnSuccess').wasCalled();
 setup: const mockData = {};
 
 
