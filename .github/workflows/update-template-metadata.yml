@@ -1,0 +1,99 @@
+name: Update template metadata
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseDescription:
+        description: "Change notes for this release (single line)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  update-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet pyyaml
+
+      - name: Compute SHAs
+        id: sha
+        run: |
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Idempotency guard - HEAD already published?
+        run: |
+          TOP_SHA=$(python3 -c "import yaml; print(yaml.safe_load(open('metadata.yaml'))['versions'][0]['sha'])")
+          if [ "$TOP_SHA" = "${{ steps.sha.outputs.sha }}" ]; then
+            echo "::error::HEAD ${{ steps.sha.outputs.sha }} is already the top entry of metadata.yaml. Nothing to release."
+            exit 1
+          fi
+
+      - name: Prepend new versions entry
+        env:
+          NEW_SHA: ${{ steps.sha.outputs.sha }}
+          NOTES: ${{ inputs.releaseDescription }}
+        run: |
+          python3 <<'PY'
+          import os, re, sys
+          new_sha = os.environ["NEW_SHA"]
+          notes = os.environ["NOTES"]
+          if "\n" in notes:
+              print("::error::releaseDescription must be a single line", file=sys.stderr)
+              sys.exit(1)
+          notes_escaped = notes.replace("\\", "\\\\").replace('"', '\\"')
+          new_block = '  - sha: "{sha}"\n    changeNotes: "{notes}"\n'.format(sha=new_sha, notes=notes_escaped)
+          with open("metadata.yaml") as f:
+              content = f.read()
+          new_content = re.sub(
+              r"^(versions:[ \t]*\n)",
+              lambda m: m.group(1) + new_block,
+              content,
+              count=1,
+              flags=re.MULTILINE,
+          )
+          if new_content == content:
+              print("::error::Could not find 'versions:' line in metadata.yaml", file=sys.stderr)
+              sys.exit(1)
+          with open("metadata.yaml", "w") as f:
+              f.write(new_content)
+          PY
+
+      - name: Validate metadata.yaml parses
+        run: python3 -c "import yaml; yaml.safe_load(open('metadata.yaml'))"
+
+      - name: Show diff
+        run: git --no-pager diff metadata.yaml
+
+      - name: Commit and push metadata bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add metadata.yaml
+          git commit -m "chore: release ${{ steps.sha.outputs.short_sha }}"
+          git push origin "HEAD:${{ github.ref_name }}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTES: ${{ inputs.releaseDescription }}
+        run: |
+          IS_DRAFT=""
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+            IS_DRAFT="--draft"
+            echo "Not on main (${{ github.ref }}) — creating a draft release."
+          fi
+          printf '%s' "$NOTES" > /tmp/release-notes.txt
+          gh release create "v${{ steps.sha.outputs.short_sha }}" \
+            --title "Release ${{ steps.sha.outputs.short_sha }}" \
+            --notes-file /tmp/release-notes.txt \
+            --target "${{ steps.sha.outputs.sha }}" \
+            $IS_DRAFT
