@@ -35,7 +35,7 @@ Items that depend on the foundation are tagged **[needs foundation]** below. Ite
 | TypeScript | `tsconfig.json` (strict, ES2020, `include: ["src/**/*"]`, `exclude: ["tests"]`) |
 | Lint | `.eslintrc.js` (per-dir overrides — see #17); `.eslintignore` |
 | Test (Jest) | `jest.config.js` (jsdom, ts-jest, `moduleNameMapper` for polyfills, coverage threshold over `libs/**`); `.babelrc` (`@babel/preset-env` for node, so `babel-jest` can transform `.js` in `libs/`) |
-| Dev harness | `index.html`; `src/gtm-polyfill.ts`; `src/gtm-polyfills/{copy-from-window,get-type,inject-script,json,log-to-console,make-number,make-string,make-table-map,object}.ts`; `vite.config.ts` (or rely on Vite defaults) |
+| Dev harness | `index.html`; `src/gtm-polyfill.ts`; `src/gtm-polyfills/{copy-from-window,get-type,inject-script,create-queue,set-in-window,call-in-window,log-to-console,make-number,make-string,make-table-map,object}.ts` (11 polyfills — see #4 for the rationale; differs from Amplitude); `vite.config.ts` (or rely on Vite defaults) |
 | Local env | `.env.example`; `scripts/setup-env.js`; `dev` script wires `pnpm setup-env && vite serve`; harness reads `import.meta.env.VITE_<key>` and exposes it on `window` |
 | Pre-commit | `.husky/pre-commit` (`pnpm lint && pnpm build && git diff --quiet`); husky devDep |
 | `.gitignore` additions | `node_modules/`, `coverage/`, `playwright-report/`, `test-results/`, `.env` |
@@ -80,7 +80,11 @@ Optional vs. required: a field is optional unless its `valueValidators` includes
 
 #### 4. Local dev harness with GTM API polyfills  *(needs foundation)*
 **Problem:** The only way to debug sandboxed JS today is via the GTM dashboard's Preview mode — a slow, opaque round-trip.
-**Change:** Add Vite-served `index.html` that loads `libs/sandboxed-js.js` after a polyfill shim. The shim (`src/gtm-polyfill.ts`) overrides `require()` (attached to `globalThis`) to return TS implementations of the 9 GTM APIs we use: `copyFromWindow`, `injectScript`, `getType`, `JSON`, `logToConsole`, `makeNumber`, `makeString`, `makeTableMap`, `Object`. Each polyfill lives in `src/gtm-polyfills/<api>.ts`. `pnpm dev` starts the harness; the same JS that ships in GTM runs in Chrome devtools.
+**Change:** Add Vite-served `index.html` that loads `libs/sandboxed-js.js` after a polyfill shim. The shim (`src/gtm-polyfill.ts`) overrides `require()` (attached to `globalThis`) to return TS implementations of the **11 GTM APIs Conviva's `sandboxed-js.js` uses**:
+
+`copyFromWindow`, `getType`, `injectScript`, `createQueue`, `setInWindow`, `callInWindow`, `logToConsole`, `makeNumber`, `makeString`, `makeTableMap`, `Object`.
+
+This list differs from Amplitude's reference repo: Conviva does **not** use `JSON`, but **does** use `createQueue`, `setInWindow`, and `callInWindow`. Each polyfill lives in `src/gtm-polyfills/<api>.ts`. `pnpm dev` starts the harness; the same JS that ships in GTM runs in Chrome devtools.
 
 Env wiring: a Conviva customer key (e.g. Touchstone) is read at runtime via `import.meta.env.VITE_CONVIVA_CUSTOMER_KEY` and exposed on `window.CONVIVA_CUSTOMER_KEY`. The kitchen-sink mock (#16) consumes it. `scripts/setup-env.js` (foundation) copies `.env.example` to `.env` if missing so first-time setup is one command.
 **Files added:** `index.html`, `src/gtm-polyfill.ts`, `src/gtm-polyfills/*.ts`, `vite.config.ts` *(some/all of these land in the foundation PR)*
