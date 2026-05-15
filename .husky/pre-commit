@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+# TOOLING_PLAN.md item #2.
+#
+# 1. Lint catches stylistic / type-adjacent issues cheaply before anything else.
+# 2. Build regenerates template.tpl + src/generated-types.ts from libs/.
+# 3. The git diff --quiet check FAILS the commit if either output drifted —
+#    forces the contributor to stage the regenerated files.
+#
+# `pnpm install` (post-clone) runs `pnpm prepare` which activates this hook
+# via core.hooksPath. If the hook isn't firing, run `pnpm prepare` once.
+
+set -e
+
+pnpm lint
+pnpm build
+
+if ! git diff --quiet; then
+  echo ""
+  echo "❌ pre-commit: build produced changes that aren't staged."
+  echo "   Most likely template.tpl or src/generated-types.ts is out of date."
+  echo "   Run \`pnpm build\`, stage the changes, and commit again."
+  echo ""
+  git --no-pager diff --stat
+  exit 1
+fi
