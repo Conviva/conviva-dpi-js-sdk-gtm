@@ -1,0 +1,17 @@
+# Supply-chain hardening (TOOLING_PLAN item #13).
+# pnpm 10+ supports these as workspace settings.
+
+# Block git/file/tarball deps slipped in by transitives.
+blockExoticSubdeps: true
+
+# Refuse to install package versions newer than this many minutes.
+# 4320 minutes = 3 days. Lockfile-recorded versions are exempt.
+minimumReleaseAge: 4320
+
+# Allowlist of packages whose postinstall scripts may run.
+# Add a package here ONLY after vetting its install script.
+onlyBuiltDependencies:
+  - esbuild
+
+# Require lockfile integrity to match the registry.
+trustPolicy: true
