@@ -2,6 +2,22 @@
 
 All notable changes to the Conviva DPI JS SDK GTM Template project are documented in this file.
 
+## [1.2.0] - 2026-05-24
+
+### Added
+
+- Support for **Conviva DPI JS SDK v2.2.0** in the Script version dropdown; v2.2.0 is now the default selection for new tags. `DEFAULT_VERSION` fallback constant bumped from `v2.1.0` to `v2.2.0`.
+- Support for **Cohort Replay v1.0.4** in the Replay script version dropdown; v1.0.4 is now the default selection for new tags. `REPLAY_DEFAULT_VERSION` fallback constant bumped from `v1.0.3` to `v1.0.4`.
+- In-template compatibility hint surfaced on both the **Script version** field help text and the **Replay script version** field help text so GTM admins see the DPI v2.2.0+ ↔ Replay v1.0.4+ pairing requirement when editing a tag.
+
+### Compatibility
+
+- DPI SDK **v2.2.0+** must be paired with Cohort Replay **v1.0.4+** for correct mid-session clientId synchronization. DPI v2.2.0 introduces the native WebView bridge for hybrid Android / iOS apps, which can supply the clientId after replay has already started; Replay v1.0.4 reacts to the resulting `ConvivaClientIdChanged` signal and hot-swaps its upload identity to match. The bumped defaults in this template enforce that pairing for new GTM tags. Existing tags retain their saved version values (GTM persists field values at tag-save time, so the default flip does not retroactively change existing configurations).
+
+### Tests
+
+- Default-version URL test updated to assert that an Init tag with no version override resolves to `v2.2.0/convivaAppTracker.js`.
+
 ## [1.1.0] - 2026-04-30
 
 ### Added
