@@ -251,6 +251,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "selectItems": [
           {
+            "displayValue": "v2.2.0",
+            "value": "v2.2.0"
+          },
+          {
             "displayValue": "v2.1.0",
             "value": "v2.1.0"
           },
@@ -272,11 +276,11 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "displayName": "Script version",
-        "defaultValue": "v2.1.0",
+        "defaultValue": "v2.2.0",
         "simpleValueType": true,
         "name": "scriptVersion",
         "type": "SELECT",
-        "help": "SDK version to load from Conviva CDN (sensor.conviva.com). Overridden by Custom version when set.",
+        "help": "SDK version to load from Conviva CDN (sensor.conviva.com). Overridden by Custom version when set. NOTE: When using DPI v2.2.0 or later together with Cohort Replay, you must also select (or pin via Replay Custom Version) Cohort Replay v1.0.4 or later — earlier replay versions will not stay in the same Conviva session after DPI's mid-session clientId updates.",
         "enablingConditions": [
           {
             "paramName": "scriptSource",
@@ -290,7 +294,7 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "scriptVersionCustom",
         "type": "TEXT",
-        "valueHint": "Overrides dropdown when set (e.g. v2.1.0, v2.0.2)",
+        "valueHint": "Overrides dropdown when set (e.g. v2.2.0, v2.1.0)",
         "enablingConditions": [
           {
             "paramName": "scriptSource",
@@ -368,6 +372,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "selectItems": [
           {
+            "displayValue": "v1.0.4",
+            "value": "v1.0.4"
+          },
+          {
             "displayValue": "v1.0.3",
             "value": "v1.0.3"
           },
@@ -381,11 +389,11 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "displayName": "Replay script version",
-        "defaultValue": "v1.0.3",
+        "defaultValue": "v1.0.4",
         "simpleValueType": true,
         "name": "replayScriptVersion",
         "type": "SELECT",
-        "help": "Replay SDK version from Conviva CDN. Overridden by Custom version when set.",
+        "help": "Replay SDK version from Conviva CDN. Overridden by Custom version when set. NOTE: When the DPI SDK version (above) is v2.2.0 or later, you must select Cohort Replay v1.0.4 or later — earlier replay versions will not stay in the same Conviva session after DPI's mid-session clientId updates.",
         "enablingConditions": [
           {
             "paramName": "replayScriptSource",
@@ -399,7 +407,7 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "replayScriptVersionCustom",
         "type": "TEXT",
-        "valueHint": "Overrides dropdown when set (e.g. v1.0.3, v1.0.2)",
+        "valueHint": "Overrides dropdown when set (e.g. v1.0.4, v1.0.3)",
         "enablingConditions": [
           {
             "paramName": "replayScriptSource",
@@ -1141,12 +1149,12 @@ const Object = require('Object');
 // Constants – Conviva script creates window.apptracker; Conviva-hosted URL built from version (sensor.conviva.com)
 const CONVIVA_SCRIPT_BASE = 'https://sensor.conviva.com/dpi/releases/';
 const CONVIVA_SCRIPT_FILE = '/convivaAppTracker.js';
-const DEFAULT_VERSION = 'v2.1.0';
+const DEFAULT_VERSION = 'v2.2.0';
 const LOG_PREFIX = '[Conviva DPI JS SDK / GTM] ';
 // Cohort Replay – must load and init before main SDK (same Conviva CDN pattern)
 const REPLAY_SCRIPT_BASE = 'https://sensor.conviva.com/replay/releases/';
 const REPLAY_SCRIPT_FILE = '/conviva-replay.umd.min.js';
-const REPLAY_DEFAULT_VERSION = 'v1.0.3';
+const REPLAY_DEFAULT_VERSION = 'v1.0.4';
 const REPLAY_NAMESPACE = 'ConvivaReplay';
 
 // Ensures apptracker queue stub and GlobalConvivaNamespace exist (sandbox: use createQueue/createArgumentsQueue only).
@@ -2328,7 +2336,7 @@ scenarios:
     });
 
     runCode(mockData);
-    assertThat(injectedUrl).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.1.0/convivaAppTracker.js');
+    assertThat(injectedUrl).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.2.0/convivaAppTracker.js');
     assertApi('gtmOnSuccess').wasCalled();
 setup: const mockData = {};
 
