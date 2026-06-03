@@ -14,12 +14,12 @@ const Object = require('Object');
 // Constants – Conviva script creates window.apptracker; Conviva-hosted URL built from version (sensor.conviva.com)
 const CONVIVA_SCRIPT_BASE = 'https://sensor.conviva.com/dpi/releases/';
 const CONVIVA_SCRIPT_FILE = '/convivaAppTracker.js';
-const DEFAULT_VERSION = 'v2.1.0';
+const DEFAULT_VERSION = 'v2.2.0';
 const LOG_PREFIX = '[Conviva DPI JS SDK / GTM] ';
 // Cohort Replay – must load and init before main SDK (same Conviva CDN pattern)
 const REPLAY_SCRIPT_BASE = 'https://sensor.conviva.com/replay/releases/';
 const REPLAY_SCRIPT_FILE = '/conviva-replay.umd.min.js';
-const REPLAY_DEFAULT_VERSION = 'v1.0.3';
+const REPLAY_DEFAULT_VERSION = 'v1.0.4';
 const REPLAY_NAMESPACE = 'ConvivaReplay';
 
 // Ensures apptracker queue stub and GlobalConvivaNamespace exist (sandbox: use createQueue/createArgumentsQueue only).
@@ -203,17 +203,15 @@ const runNonInit = function() {
   data.gtmOnSuccess();
 };
 
-// Build init config: appId, convivaCustomerKey, appVersion, optional configs.enableClIdInCookies, optional deviceMetadata
+// Build init config: appId, convivaCustomerKey, appVersion, configs.enableClIdInCookies (default true unless explicitly false), optional deviceMetadata
 const buildInitConfig = function() {
   const config = {
     appId: data.appId,
     convivaCustomerKey: data.convivaCustomerKey,
     appVersion: data.appVersion || undefined
   };
-  if (data.enableClIdInCookies === true) {
-    config.configs = config.configs || {};
-    config.configs.enableClIdInCookies = true;
-  }
+  config.configs = config.configs || {};
+  config.configs.enableClIdInCookies = data.enableClIdInCookies !== false;
   const deviceMetadata = {};
   if (data.deviceBrand) deviceMetadata.DeviceBrand = data.deviceBrand;
   if (data.deviceManufacturer) deviceMetadata.DeviceManufacturer = data.deviceManufacturer;
