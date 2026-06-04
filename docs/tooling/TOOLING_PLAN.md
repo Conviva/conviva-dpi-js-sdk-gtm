@@ -78,12 +78,13 @@ After the foundation bucket is implemented, the remaining items below proceed on
 **Problem:** After each template change, a human runs `git rev-parse HEAD`, edits `metadata.yaml` to prepend a new `versions:` entry with the SHA + change notes, commits, pushes. Easy to forget, easy to typo.
 **Change:** Add `.github/workflows/update-template-metadata.yml` triggered by `workflow_dispatch` with a `releaseDescription` input. The job: (a) installs deps and runs `pnpm build && pnpm test` so we never publish a broken template (gap vs. PR #6 — currently absent); (b) computes the latest commit SHA; (c) prepends a new `versions:` entry to `metadata.yaml`; (d) lints the YAML (yaml-lint as a release-time guard, mirroring #12); (e) creates a GitHub Release; (f) pushes the metadata commit. Draft-release-on-non-main and idempotency guard included.
 **Files added:** `.github/workflows/update-template-metadata.yml`
-**Status:** Implemented on branch `chore/release-tooling` *(not on `develop` or `main` yet)*. PR #6 in the plan referred to the intended release PR; workflow is `update-template-metadata.yml` (not `release.yml`). Still missing `pnpm build && pnpm test` pre-publish guard — see #6 + foundation.
+**Status:** Implemented on branch `chore/release-tooling` *(not on `develop` or `main` yet)*. PR #6 in the plan referred to the intended release PR; workflow is `update-template-metadata.yml` (not `release.yml`). Pre-publish `pnpm build` + `pnpm test` guard added on `chore/release-tooling-foundation` (with #6).
 
 #### 2. Pre-commit guard: lint, build, then assert clean tree  *(needs foundation)*
 **Problem:** Once `template.tpl` is generated from `libs/`, the two can drift (commit `libs/` change, forget to rebuild). Reviewers see only the unrelated `libs/` diff and miss it.
 **Change:** Add a husky pre-commit hook that runs `pnpm lint && pnpm build && git diff --quiet`. Lint runs first to surface stylistic issues cheaply; build then regenerates `template.tpl` and `src/generated-types.ts`; the `git diff --quiet` check blocks the commit if anything got regenerated. *(Note: this is the foundation's husky hook; if the foundation PR ships it inline, this item is just "verified working".)*
 **Files added:** `.husky/pre-commit`, husky devDep in `package.json`
+**Status:** Done on `chore/release-tooling-foundation` (`d5a342d`).
 
 #### 3. Generate TS types from template parameters  *(needs foundation)*
 **Problem:** Schema changes (renaming a Field, changing a Field type) silently break the sandboxed JS that reads them.
@@ -121,6 +122,7 @@ Env wiring: a Conviva customer key (e.g. Touchstone) is read at runtime via `imp
 **Open question (blocks this item):** which Conviva endpoint do we assert on, and which customer key do we use? Options: dedicated test customer key in Touchstone (mirrors Amplitude's model), or a localhost intercept that doesn't talk to a real ingest.
 **Files added:** `playwright.config.ts`, `e2e/smoke-test.spec.ts`, `.github/workflows/e2e.yml`
 **Secrets needed:** `CONVIVA_CUSTOMER_KEY` (or equivalent) on the GitHub repo.
+**Status:** Not started — blocked on ingest endpoint / customer key decision.
 
 #### 6. Coverage threshold + build-check CI gate  *(needs foundation)*
 **Problem:** Without enforced coverage, the test layer can silently degrade. Without a build check, PRs can land with stale `template.tpl`.
@@ -137,6 +139,7 @@ Env wiring: a Conviva customer key (e.g. Touchstone) is read at runtime via `imp
 This single workflow consolidates #6 + #12 + the type-check gate.
 **Files added:** `.github/workflows/build.yml`
 **Files modified:** `jest.config.js` (coverage thresholds)
+**Status:** CI workflow + release pre-publish guard done on `chore/release-tooling-foundation`; **coverage thresholds still at 0** until #9/#15/#16 expand the test suite (jest.config.js comment).
 
 ### Highest-leverage additions
 
@@ -149,6 +152,7 @@ This single workflow consolidates #6 + #12 + the type-check gate.
 **Problem:** Editing Fields/Info JSON by hand is painful. The GTM dashboard UI is the natural editor for the schema.
 **Change:** Add `scripts/sync-template.js` — paste the GTM-exported `.tpl` over `template.tpl`, run `pnpm sync`, and the script splits it back into `libs/template-info.json`, `libs/template-parameters.json`, `libs/sandboxed-js.js`. Refuses to run if `libs/` has uncommitted changes (prevents data loss). **Preserves the `// exports:start … // exports:end` block** when rewriting `libs/sandboxed-js.js` — the GTM-exported `.tpl` won't contain it (it's stripped at build time per #9), so the script must read the existing `libs/sandboxed-js.js`, lift that block, and append it back after the splitter writes the new content.
 **Files added:** `scripts/sync-template.js`
+**Status:** Done on `chore/release-tooling-foundation` (`scripts/sync-template.js`).
 
 ### Remaining items
 
@@ -236,6 +240,7 @@ Pick at implementation time. Amplitude's reusable template internally uses the A
 - Did you re-test after the most recent `template.tpl` rebuild?
 - Did you attach screenshots or a recording?
 **Files added:** `.github/pull_request_template.md`
+**Status:** Done on `chore/release-tooling-foundation`.
 
 #### 20. `.cursorrules` for AI coding tools  *(standalone)*
 **Problem:** Coding agents (Cursor, Claude, etc.) need project conventions to write idiomatic code — file naming, lint exceptions, "never edit generated files," "no breaking changes to `template-parameters.json` / `sandboxed-js.js`," etc. Without explicit rules, agents drift.

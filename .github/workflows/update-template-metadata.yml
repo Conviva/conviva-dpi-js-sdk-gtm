@@ -20,6 +20,28 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@39370e3970a2357ddcb2e52665b704deb17132ac # v4.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies and verify template
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          if ! git diff --quiet template.tpl src/generated-types.ts; then
+            echo "::error::Build produced uncommitted changes — fix libs/ and commit before releasing."
+            exit 1
+          fi
+          pnpm type-check
+          pnpm lint
+          pnpm test
+          pnpm exec yaml-lint metadata.yaml
+
       - name: Install PyYAML
         run: python3 -m pip install --quiet pyyaml
 
