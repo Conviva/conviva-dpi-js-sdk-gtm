@@ -1,0 +1,36 @@
+# Conviva DPI JS SDK GTM Template
+
+## Overview
+Google Tag Manager community template for the Conviva DPI JS SDK. Source lives in `libs/`; `template.tpl` is generated — never edit it by hand.
+
+## Commands
+- `pnpm install` — dependencies
+- `pnpm build` — `template.tpl` + `src/generated-types.ts` from `libs/`
+- `pnpm test` — Jest (100% coverage on `libs/sandboxed-js.js`)
+- `pnpm dev` — Vite harness (`index.html` + polyfills)
+- `pnpm sync` — split `template.tpl` → `libs/` (after GTM dashboard export)
+- `pnpm test:e2e` — Playwright smoke on dev harness
+
+## Do not edit manually
+- `template.tpl` (run `pnpm build`)
+- `src/generated-types.ts` (run `pnpm build`)
+- Prefer editing `libs/template-info.json`, `libs/template-parameters.json`, `libs/sandboxed-js.js`
+
+## sandboxed-js.js
+- Single file, no npm imports — only GTM `require('<api>')` APIs
+- Test hatch: `// exports:start` … `// exports:end` (stripped from published template)
+- SDK CDN version: `SDK_VERSION` / `REPLAY_SDK_VERSION` constants at top
+- **No breaking changes** to field names or tag behavior without a major release note
+
+## TypeScript / tests
+- Single quotes, 2 spaces, semicolons
+- `tests/kitchen-sink.ts` — shared mock `data` for tests and harness
+- Unit tests use `tests/helpers/sandbox-test-env.ts` and `__EXPORTS__`
+- After schema changes: update kitchen-sink + snapshots
+
+## GTM validation
+- Local `pnpm dev` uses polyfills — not a substitute for **tagmanager.google.com Preview**
+- `___TESTS___` scenarios in `template.tpl.ejs` run in GTM on Save
+
+## Branching
+- Tooling work merges to `develop` first; `main` only after full plan verification

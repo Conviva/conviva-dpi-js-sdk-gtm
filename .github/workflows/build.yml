@@ -54,3 +54,6 @@ jobs:
 
       - name: Unit tests
         run: pnpm test
+
+      - name: Verify GitHub Actions are SHA-pinned
+        run: node scripts/check-action-shas.js

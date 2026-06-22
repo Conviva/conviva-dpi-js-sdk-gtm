@@ -2,6 +2,43 @@
 
 Deploy the [Conviva JavaScript DPI SDK](https://github.com/Conviva/conviva-js-script-appanalytics) via Google Tag Manager without editing site code.
 
+## Development (contributors)
+
+Requires **Node 20+** and **pnpm** (`corepack enable`).
+
+```bash
+pnpm install
+pnpm setup-env    # copies .env.example → .env (add your Touchstone customer key)
+pnpm build        # libs/ → template.tpl + src/generated-types.ts
+pnpm test         # Jest unit tests (libs/sandboxed-js.js)
+pnpm lint
+pnpm type-check
+pnpm dev          # http://localhost:5173 — local harness with GTM API polyfills
+pnpm test:e2e     # Playwright smoke (starts Vite; asserts SDK script request)
+```
+
+### Making changes
+
+| What you edit | Then |
+|---|---|
+| Tag fields / UI (`___INFO___`, `___TEMPLATE_PARAMETERS___`) | Edit `libs/template-info.json` or `libs/template-parameters.json`, or export from GTM → paste into `template.tpl` → `pnpm sync` |
+| Sandbox logic | Edit `libs/sandboxed-js.js` (test-only code goes in `// exports:start` … `// exports:end`) |
+| GTM-native tests | Edit `___TESTS___` in `template.tpl.ejs` |
+
+Always run **`pnpm build`** and commit **`template.tpl`** with your `libs/` changes. Husky runs lint + build on commit.
+
+### Testing in GTM (required before release)
+
+1. Run `pnpm build`.
+2. Import or update `template.tpl` in [tagmanager.google.com](https://tagmanager.google.com) (Templates → Import).
+3. Use **Preview** — confirm Init and other tags; GTM runs `___TESTS___` on Save.
+
+See [docs/GTM_SETUP.md](docs/GTM_SETUP.md) for container setup and [docs/tooling/TOOLING_PLAN.md](docs/tooling/TOOLING_PLAN.md) for the full CI/release pipeline.
+
+### Release (maintainers)
+
+On `main`, run the **Update template metadata** GitHub Action with a one-line change note. It verifies build/tests, bumps `metadata.yaml`, attaches `conviva-gtm.<sha>.tpl`, and creates a GitHub Release.
+
 ## Installation
 
 For a full container setup (variables, tags, triggers, and dataLayer event names), see **[GTM_SETUP.md](docs/GTM_SETUP.md)**.

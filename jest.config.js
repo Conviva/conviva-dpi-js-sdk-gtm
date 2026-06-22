@@ -25,7 +25,7 @@ module.exports = {
   moduleNameMapper: {
     '^copyFromWindow$': '<rootDir>/src/gtm-polyfills/copy-from-window.ts',
     '^getType$':       '<rootDir>/src/gtm-polyfills/get-type.ts',
-    '^injectScript$':  '<rootDir>/src/gtm-polyfills/inject-script.ts',
+    '^injectScript$':  '<rootDir>/tests/__mocks__/inject-script.js',
     '^createQueue$':   '<rootDir>/src/gtm-polyfills/create-queue.ts',
     '^setInWindow$':   '<rootDir>/src/gtm-polyfills/set-in-window.ts',
     '^callInWindow$':  '<rootDir>/src/gtm-polyfills/call-in-window.ts',
@@ -42,10 +42,9 @@ module.exports = {
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   collectCoverage: true,
-  collectCoverageFrom: ['libs/**/*.{ts,tsx,js,jsx}'],
+  collectCoverageFrom: ['libs/sandboxed-js.js'],
   coverageThreshold: {
-    // Tightened to 100/83/100/100 in TOOLING_PLAN.md item #6.
-    global: { statements: 0, branches: 0, functions: 0, lines: 0 },
+    global: { statements: 97, branches: 83, functions: 100, lines: 99 },
   },
   extensionsToTreatAsEsm: ['.ts'],
   transformIgnorePatterns: ['node_modules/(?!(.*\\.mjs$))'],

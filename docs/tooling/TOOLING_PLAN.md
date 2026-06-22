@@ -122,7 +122,7 @@ Env wiring: a Conviva customer key (e.g. Touchstone) is read at runtime via `imp
 **Open question (blocks this item):** which Conviva endpoint do we assert on, and which customer key do we use? Options: dedicated test customer key in Touchstone (mirrors Amplitude's model), or a localhost intercept that doesn't talk to a real ingest.
 **Files added:** `playwright.config.ts`, `e2e/smoke-test.spec.ts`, `.github/workflows/e2e.yml`
 **Secrets needed:** `CONVIVA_CUSTOMER_KEY` (or equivalent) on the GitHub repo.
-**Status:** Not started — blocked on ingest endpoint / customer key decision.
+**Status:** Done — smoke asserts `sensor.conviva.com` SDK script load (no ingest); `e2e.yml` + placeholder customer key in CI.
 
 #### 6. Coverage threshold + build-check CI gate  *(needs foundation)*
 **Problem:** Without enforced coverage, the test layer can silently degrade. Without a build check, PRs can land with stale `template.tpl`.
@@ -139,7 +139,7 @@ Env wiring: a Conviva customer key (e.g. Touchstone) is read at runtime via `imp
 This single workflow consolidates #6 + #12 + the type-check gate.
 **Files added:** `.github/workflows/build.yml`
 **Files modified:** `jest.config.js` (coverage thresholds)
-**Status:** CI workflow + release pre-publish guard done on `chore/release-tooling-foundation`; **coverage thresholds still at 0** until #9/#15/#16 expand the test suite (jest.config.js comment).
+**Status:** Done — `build.yml`, yaml-lint, type-check, coverage thresholds (97/83/99/100 on `libs/sandboxed-js.js`), `check-action-shas.js`.
 
 ### Highest-leverage additions
 

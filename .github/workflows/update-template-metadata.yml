@@ -97,8 +97,8 @@ jobs:
 
       - name: Commit and push metadata bump
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "conviva-gtm-bot"
+          git config user.email "conviva-gtm-bot@users.noreply.github.com"
           git add metadata.yaml
           git commit -m "chore: release ${{ steps.sha.outputs.short_sha }}"
           git push origin "HEAD:${{ github.ref_name }}"
@@ -107,15 +107,20 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NOTES: ${{ inputs.releaseDescription }}
+          SHORT_SHA: ${{ steps.sha.outputs.short_sha }}
+          TARGET_SHA: ${{ steps.sha.outputs.sha }}
         run: |
           IS_DRAFT=""
           if [ "${{ github.ref }}" != "refs/heads/main" ]; then
             IS_DRAFT="--draft"
             echo "Not on main (${{ github.ref }}) — creating a draft release."
           fi
+          TEMPLATE_ASSET="conviva-gtm.${SHORT_SHA}.tpl"
+          cp template.tpl "$TEMPLATE_ASSET"
           printf '%s' "$NOTES" > /tmp/release-notes.txt
-          gh release create "v${{ steps.sha.outputs.short_sha }}" \
-            --title "Release ${{ steps.sha.outputs.short_sha }}" \
+          gh release create "v${SHORT_SHA}" \
+            --title "Release ${SHORT_SHA}" \
             --notes-file /tmp/release-notes.txt \
-            --target "${{ steps.sha.outputs.sha }}" \
-            $IS_DRAFT
+            --target "${TARGET_SHA}" \
+            $IS_DRAFT \
+            "$TEMPLATE_ASSET"
