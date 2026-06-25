@@ -9,7 +9,7 @@ test.describe('Dev harness', () => {
       { timeout: 15_000 },
     );
 
-    await page.goto('/');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     const req = await sdkRequest;
     expect(req.url()).toMatch(/sensor\.conviva\.com\/dpi\/releases\/.+\/convivaAppTracker\.js/);

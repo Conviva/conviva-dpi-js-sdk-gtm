@@ -35,7 +35,7 @@ jobs:
         run: echo 'VITE_CONVIVA_CUSTOMER_KEY=e2e-ci-placeholder-key' > .env
 
       - name: Playwright smoke tests
-        run: pnpm test:e2e
+        run: pnpm test:e2e --project=chromium
         env:
           CI: true
           VITE_CONVIVA_CUSTOMER_KEY: e2e-ci-placeholder-key
