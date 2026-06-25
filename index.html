@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Conviva DPI JS SDK GTM template — dev harness</title>
+  </head>
+  <body>
+    <h1>Conviva DPI JS SDK GTM template</h1>
+    <p>Dev harness — open DevTools console for output.</p>
+    <p>
+      The polyfills under <code>src/gtm-polyfills/</code> stand in for the GTM
+      sandbox APIs. The same <code>libs/sandboxed-js.js</code> that ships in
+      <code>template.tpl</code> runs here, then logs to the console.
+    </p>
+    <script type="module">
+      // Customer key, sourced from .env at build time (Vite injects).
+      window.CONVIVA_CUSTOMER_KEY = import.meta.env.VITE_CONVIVA_CUSTOMER_KEY;
+    </script>
+    <script type="module" src="src/gtm-polyfill.ts"></script>
+    <script type="module" src="tests/kitchen-sink-harness.ts"></script>
+    <script defer src="libs/sandboxed-js.js"></script>
+  </body>
+</html>

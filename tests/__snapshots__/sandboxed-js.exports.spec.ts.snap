@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`sandboxed-js __EXPORTS__ buildInitConfig matches kitchen-sink init snapshot fields 1`] = `
+{
+  "appId": "WEB App",
+  "appVersion": "1.0.0",
+  "configs": {
+    "enableClIdInCookies": true,
+  },
+  "convivaCustomerKey": "test-customer-key",
+  "deviceMetadata": {
+    "DeviceBrand": "Acme",
+    "DeviceCategory": "desktop",
+    "DeviceManufacturer": "Acme Inc",
+    "DeviceModel": "Browser",
+    "DeviceType": "Web",
+    "DeviceVersion": "1",
+    "FrameworkName": "React",
+    "FrameworkVersion": "19",
+    "OperatingSystemName": "macOS",
+    "OperatingSystemVersion": "14.0",
+  },
+}
+`;
+
+exports[`sandboxed-js __EXPORTS__ buildRevenueData — valid kitchen-sink payload 1`] = `
+{
+  "cartSize": 3,
+  "currency": "USD",
+  "discount": 10,
+  "extraMetadata": {
+    "campaign": "spring",
+    "loyalty_tier": "gold",
+  },
+  "items": [
+    {
+      "productId": "sku-1",
+      "quantity": 1,
+    },
+  ],
+  "orderStatus": "completed",
+  "paymentMethod": "card",
+  "paymentProvider": "stripe",
+  "shippingCost": 5,
+  "taxAmount": 8.5,
+  "totalOrderAmount": 99.5,
+  "transactionId": "order-42",
+}
+`;

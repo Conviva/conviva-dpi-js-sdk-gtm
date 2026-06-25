@@ -1,0 +1,126 @@
+name: Update template metadata
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseDescription:
+        description: "Change notes for this release (single line)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  update-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies and verify template
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          if ! git diff --quiet template.tpl src/generated-types.ts; then
+            echo "::error::Build produced uncommitted changes — fix libs/ and commit before releasing."
+            exit 1
+          fi
+          pnpm type-check
+          pnpm lint
+          pnpm test
+          pnpm exec yamllint metadata.yaml
+
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet pyyaml
+
+      - name: Compute SHAs
+        id: sha
+        run: |
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "short_sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Idempotency guard - HEAD already published?
+        run: |
+          TOP_SHA=$(python3 -c "import yaml; print(yaml.safe_load(open('metadata.yaml'))['versions'][0]['sha'])")
+          if [ "$TOP_SHA" = "${{ steps.sha.outputs.sha }}" ]; then
+            echo "::error::HEAD ${{ steps.sha.outputs.sha }} is already the top entry of metadata.yaml. Nothing to release."
+            exit 1
+          fi
+
+      - name: Prepend new versions entry
+        env:
+          NEW_SHA: ${{ steps.sha.outputs.sha }}
+          NOTES: ${{ inputs.releaseDescription }}
+        run: |
+          python3 <<'PY'
+          import os, re, sys
+          new_sha = os.environ["NEW_SHA"]
+          notes = os.environ["NOTES"]
+          if "\n" in notes:
+              print("::error::releaseDescription must be a single line", file=sys.stderr)
+              sys.exit(1)
+          notes_escaped = notes.replace("\\", "\\\\").replace('"', '\\"')
+          new_block = '  - sha: "{sha}"\n    changeNotes: "{notes}"\n'.format(sha=new_sha, notes=notes_escaped)
+          with open("metadata.yaml") as f:
+              content = f.read()
+          new_content = re.sub(
+              r"^(versions:[ \t]*\n)",
+              lambda m: m.group(1) + new_block,
+              content,
+              count=1,
+              flags=re.MULTILINE,
+          )
+          if new_content == content:
+              print("::error::Could not find 'versions:' line in metadata.yaml", file=sys.stderr)
+              sys.exit(1)
+          with open("metadata.yaml", "w") as f:
+              f.write(new_content)
+          PY
+
+      - name: Validate metadata.yaml parses
+        run: python3 -c "import yaml; yaml.safe_load(open('metadata.yaml'))"
+
+      - name: Show diff
+        run: git --no-pager diff metadata.yaml
+
+      - name: Commit and push metadata bump
+        run: |
+          git config user.name "conviva-gtm-bot"
+          git config user.email "conviva-gtm-bot@users.noreply.github.com"
+          git add metadata.yaml
+          git commit -m "chore: release ${{ steps.sha.outputs.short_sha }}"
+          git push origin "HEAD:${{ github.ref_name }}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTES: ${{ inputs.releaseDescription }}
+          SHORT_SHA: ${{ steps.sha.outputs.short_sha }}
+          TARGET_SHA: ${{ steps.sha.outputs.sha }}
+        run: |
+          IS_DRAFT=""
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+            IS_DRAFT="--draft"
+            echo "Not on main (${{ github.ref }}) — creating a draft release."
+          fi
+          TEMPLATE_ASSET="conviva-gtm.${SHORT_SHA}.tpl"
+          cp template.tpl "$TEMPLATE_ASSET"
+          printf '%s' "$NOTES" > /tmp/release-notes.txt
+          gh release create "v${SHORT_SHA}" \
+            --title "Release ${SHORT_SHA}" \
+            --notes-file /tmp/release-notes.txt \
+            --target "${TARGET_SHA}" \
+            $IS_DRAFT \
+            "$TEMPLATE_ASSET"

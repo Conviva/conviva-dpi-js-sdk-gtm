@@ -1,0 +1,951 @@
+___TERMS_OF_SERVICE___
+
+By creating or modifying this file you agree to Google Tag Manager's Community
+Template Gallery Developer Terms of Service available at
+https://developers.google.com/tag-manager/gallery-tos (or such other URL as
+Google may provide), as modified from time to time.
+
+
+___INFO___
+
+<%- infoJson %>
+
+___TEMPLATE_PARAMETERS___
+
+<%- templateParametersJson %>
+
+___SANDBOXED_JS_FOR_WEB_TEMPLATE___
+
+<%- sandboxedJs %>
+
+___WEB_PERMISSIONS___
+
+[
+  {
+    "instance": {
+      "key": {
+        "publicId": "logging",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "environments",
+          "value": {
+            "type": 1,
+            "string": "debug"
+          }
+        }
+      ]
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "access_globals",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "keys",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "apptracker"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "GlobalConvivaNamespace"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "ConvivaReplay"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "apptracker.q"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "apptracker.q.push"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "inject_script",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "urls",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "https://sensor.conviva.com/dpi/releases/*"
+              },
+              {
+                "type": 1,
+                "string": "https://sensor.conviva.com/replay/releases/*"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  }
+]
+
+
+___TESTS___
+
+scenarios:
+- name: Init tag loads script and calls convivaAppTracker
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_customer_key';
+    mockData.appId = 'WEB App';
+    mockData.appVersion = '1.0.0';
+    mockData.scriptSource = 'conviva_hosted';
+
+    var injectUrl;
+    var onSuccess;
+    mock('injectScript', function(url, success, failure) {
+      injectUrl = url;
+      onSuccess = success;
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        if (cmd === 'convivaAppTracker') {
+          assertThat(arg.appId).isEqualTo('WEB App');
+          assertThat(arg.convivaCustomerKey).isEqualTo('test_customer_key');
+          assertThat(arg.appVersion).isEqualTo('1.0.0');
+        }
+      };
+    });
+
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: setUserId tag calls apptracker with setUserId
+  code: |-
+    mockData.type = 'setUserId';
+    mockData.setUserId = 'user_123';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, val) {
+        assertThat(cmd).isEqualTo('setUserId');
+        assertThat(val).isEqualTo('user_123');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackPageView tag calls apptracker with no arg
+  code: |-
+    mockData.type = 'trackPageView';
+    mockData.trackPageViewTitle = '';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('trackPageView');
+        assertThat(arg).isEqualTo(undefined);
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackPageView with title override
+  code: |-
+    mockData.type = 'trackPageView';
+    mockData.trackPageViewTitle = 'My Page';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('trackPageView');
+        assertThat(arg).isEqualTo({ title: 'My Page' });
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackCustomEvent tag calls apptracker with name and data
+  code: |-
+    mockData.type = 'trackCustomEvent';
+    mockData.eventName = 'test_event';
+    mockData.eventData = [{ name: 'k', value: 'v' }];
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('trackCustomEvent');
+        assertThat(arg.name).isEqualTo('test_event');
+        assertThat(arg.data).isEqualTo({ k: 'v' });
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackRevenue tag calls apptracker with correct types
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = 'ord_123';
+    mockData.revenueTotalOrderAmount = '99.99';
+    mockData.revenueCurrency = 'USD';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('trackCustomEvent');
+        assertThat(arg.name).isEqualTo('conviva_revenue_event');
+        assertThat(arg.data.transactionId).isEqualTo('ord_123');
+        assertThat(arg.data.totalOrderAmount).isEqualTo(99.99);
+        assertThat(arg.data.currency).isEqualTo('USD');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackRevenue fails when totalOrderAmount is not a number
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = 'ord_123';
+    mockData.revenueTotalOrderAmount = 'not_a_number';
+    mockData.revenueCurrency = 'USD';
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: trackRevenue fails when transactionId is empty
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = '';
+    mockData.revenueTotalOrderAmount = '50.00';
+    mockData.revenueCurrency = 'USD';
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: trackRevenue fails when currency is empty
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = 'ord_123';
+    mockData.revenueTotalOrderAmount = '50.00';
+    mockData.revenueCurrency = '';
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: setCustomTags tag calls apptracker with tags object
+  code: |-
+    mockData.type = 'setCustomTags';
+    mockData.setCustomTagsTable = [{ key: 'a', value: '1' }];
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('setCustomTags');
+        assertThat(arg).isEqualTo({ a: '1' });
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: unsetCustomTags tag calls apptracker with array of keys
+  code: |-
+    mockData.type = 'unsetCustomTags';
+    mockData.unsetCustomTagsKeys = 'key1, key2';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('unsetCustomTags');
+        assertThat(arg).isEqualTo(['key1', 'key2']);
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackError tag calls apptracker with message
+  code: |-
+    mockData.type = 'trackError';
+    mockData.trackErrorMessage = 'Test error';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('trackError');
+        assertThat(arg.message).isEqualTo('Test error');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Non-init tag when apptracker missing fails
+  code: |-
+    mockData.type = 'trackPageView';
+    mock('copyFromWindow', function(key) {
+      return undefined;
+    });
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: Init with Cohort Replay loads replay script first then main script
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initWithCohortReplay = true;
+    mockData.replayScriptSource = 'conviva_hosted';
+    mockData.replayScriptVersion = 'v1.0.1';
+
+    var loadOrder = [];
+    mock('injectScript', function(url, success, failure, id) {
+      loadOrder.push(id);
+      if (id === 'conviva_replay') {
+        mock('copyFromWindow', function(key) {
+          if (key === 'ConvivaReplay') {
+            return { init: function(k) { assertThat(k).isEqualTo('test_key'); } };
+          }
+          return function() {};
+        });
+      }
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(loadOrder[0]).isEqualTo('conviva_replay');
+    assertThat(loadOrder[1]).isEqualTo('conviva_appanalytics');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with Cohort Replay disabled does not load replay script
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initWithCohortReplay = false;
+
+    var loadedIds = [];
+    mock('injectScript', function(url, success, failure, id) {
+      loadedIds.push(id);
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(loadedIds.length).isEqualTo(1);
+    assertThat(loadedIds[0]).isEqualTo('conviva_appanalytics');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Replay script failure calls gtmOnFailure
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initWithCohortReplay = true;
+    mockData.replayScriptSource = 'conviva_hosted';
+    mockData.replayScriptVersion = 'v1.0.1';
+
+    mock('injectScript', function(url, success, failure, id) {
+      if (id === 'conviva_replay') {
+        failure();
+      } else {
+        success();
+      }
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: Main script failure calls gtmOnFailure
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+
+    mock('injectScript', function(url, success, failure, id) {
+      failure();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: Customer-hosted script URL is used when source is customer_hosted
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'customer_hosted';
+    mockData.scriptUrl = 'https://cdn.example.com/convivaAppTracker.js';
+
+    var injectedUrl;
+    mock('injectScript', function(url, success, failure, id) {
+      injectedUrl = url;
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(injectedUrl).isEqualTo('https://cdn.example.com/convivaAppTracker.js');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Customer-hosted script URL missing fails
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'customer_hosted';
+    mockData.scriptUrl = '';
+
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: Customer-hosted replay URL is used when replay source is customer_hosted
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initWithCohortReplay = true;
+    mockData.replayScriptSource = 'customer_hosted';
+    mockData.replayScriptUrl = 'https://cdn.example.com/conviva-replay.js';
+
+    var injectedUrls = [];
+    mock('injectScript', function(url, success, failure, id) {
+      injectedUrls.push(url);
+      if (id === 'conviva_replay') {
+        mock('copyFromWindow', function(key) {
+          if (key === 'ConvivaReplay') return { init: function() {} };
+          return function() {};
+        });
+      }
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(injectedUrls[0]).isEqualTo('https://cdn.example.com/conviva-replay.js');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Customer-hosted replay URL missing fails
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initWithCohortReplay = true;
+    mockData.replayScriptSource = 'customer_hosted';
+    mockData.replayScriptUrl = '';
+
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: Init sets userId when provided
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initUserId = 'user_abc';
+
+    var commands = [];
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) { commands.push(cmd); };
+    });
+
+    runCode(mockData);
+    assertThat(commands).contains('setUserId');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init sets clientId when provided
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initClientId = 'client_xyz';
+
+    var commands = [];
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) { commands.push(cmd); };
+    });
+
+    runCode(mockData);
+    assertThat(commands).contains('setClientId');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init sets default custom tags when provided
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initCustomTags = [{ key: 'env', value: 'prod' }];
+
+    var commands = [];
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) { commands.push(cmd); };
+    });
+
+    runCode(mockData);
+    assertThat(commands).contains('setCustomTags');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Unknown tag type fails
+  code: |-
+    mockData.type = 'nonExistentType';
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: trackError with filename and error object
+  code: |-
+    mockData.type = 'trackError';
+    mockData.trackErrorMessage = 'Something broke';
+    mockData.trackErrorFilename = 'app.js';
+    mockData.trackErrorObject = { stack: 'Error at line 42' };
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('trackError');
+        assertThat(arg.message).isEqualTo('Something broke');
+        assertThat(arg.filename).isEqualTo('app.js');
+        assertThat(arg.error).isEqualTo({ stack: 'Error at line 42' });
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackCustomEvent with eventDataObject merges with table data
+  code: |-
+    mockData.type = 'trackCustomEvent';
+    mockData.eventName = 'merge_test';
+    mockData.eventData = [{ name: 'tableKey', value: 'tableVal' }];
+    mockData.eventDataObject = { objKey: 'objVal' };
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(cmd).isEqualTo('trackCustomEvent');
+        assertThat(arg.data.tableKey).isEqualTo('tableVal');
+        assertThat(arg.data.objKey).isEqualTo('objVal');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackRevenue with optional fields casts numbers correctly
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = 'ord_456';
+    mockData.revenueTotalOrderAmount = '150.00';
+    mockData.revenueCurrency = 'EUR';
+    mockData.revenueTaxAmount = '12.50';
+    mockData.revenueShippingCost = '5.99';
+    mockData.revenueDiscount = '10.00';
+    mockData.revenueCartSize = '3';
+    mockData.revenuePaymentMethod = 'card';
+    mockData.revenuePaymentProvider = 'Stripe';
+    mockData.revenueOrderStatus = 'completed';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(arg.data.totalOrderAmount).isEqualTo(150);
+        assertThat(arg.data.taxAmount).isEqualTo(12.5);
+        assertThat(arg.data.shippingCost).isEqualTo(5.99);
+        assertThat(arg.data.discount).isEqualTo(10);
+        assertThat(arg.data.cartSize).isEqualTo(3);
+        assertThat(arg.data.paymentMethod).isEqualTo('card');
+        assertThat(arg.data.paymentProvider).isEqualTo('Stripe');
+        assertThat(arg.data.orderStatus).isEqualTo('completed');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackRevenue puts extraMetadata as nested object
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = 'ord_789';
+    mockData.revenueTotalOrderAmount = '25.00';
+    mockData.revenueCurrency = 'USD';
+    mockData.revenueExtraMetadata = [{ key: 'promoCode', value: 'SAVE10' }];
+    mockData.revenueDataObject = { campaignId: 'camp_1' };
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(arg.data.extraMetadata.promoCode).isEqualTo('SAVE10');
+        assertThat(arg.data.extraMetadata.campaignId).isEqualTo('camp_1');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackRevenue with line items array
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = 'ord_items';
+    mockData.revenueTotalOrderAmount = '49.99';
+    mockData.revenueCurrency = 'USD';
+    mockData.revenueItemsList = [{ productId: 'p1', name: 'Widget', quantity: '2' }];
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(arg.data.totalOrderAmount).isEqualTo(49.99);
+        assertThat(arg.data.items.length).isEqualTo(1);
+        assertThat(arg.data.items[0].productId).isEqualTo('p1');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackRevenue ignores invalid numeric optional fields gracefully
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = 'ord_edge';
+    mockData.revenueTotalOrderAmount = '100';
+    mockData.revenueCurrency = 'USD';
+    mockData.revenueTaxAmount = 'not_a_number';
+    mockData.revenueShippingCost = 'abc';
+    mockData.revenuePaymentMethod = 'card';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(arg.data.totalOrderAmount).isEqualTo(100);
+        assertThat(arg.data.taxAmount).isEqualTo(undefined);
+        assertThat(arg.data.shippingCost).isEqualTo(undefined);
+        assertThat(arg.data.paymentMethod).isEqualTo('card');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: trackRevenue skips empty optional string fields
+  code: |-
+    mockData.type = 'trackRevenue';
+    mockData.revenueOrderId = 'ord_str';
+    mockData.revenueTotalOrderAmount = '75';
+    mockData.revenueCurrency = 'GBP';
+    mockData.revenuePaymentMethod = '';
+    mockData.revenuePaymentProvider = '  ';
+    mockData.revenueOrderStatus = 'pending';
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        assertThat(arg.data.paymentMethod).isEqualTo(undefined);
+        assertThat(arg.data.paymentProvider).isEqualTo(undefined);
+        assertThat(arg.data.orderStatus).isEqualTo('pending');
+      };
+    });
+    runCode(mockData);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with custom script version uses correct URL
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.scriptVersionCustom = '2.0.1';
+
+    var injectedUrl;
+    mock('injectScript', function(url, success, failure, id) {
+      injectedUrl = url;
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(injectedUrl).isEqualTo('https://sensor.conviva.com/dpi/releases/2.0.1/convivaAppTracker.js');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Non-init trackCustomEvent when apptracker is not a function fails
+  code: |-
+    mockData.type = 'trackCustomEvent';
+    mockData.eventName = 'test';
+    mock('copyFromWindow', function(key) {
+      return 'not_a_function';
+    });
+    runCode(mockData);
+    assertApi('gtmOnFailure').wasCalled();
+- name: Conviva-hosted replay uses correct versioned URL
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.initWithCohortReplay = true;
+    mockData.replayScriptSource = 'conviva_hosted';
+    mockData.replayScriptVersion = 'v1.0.1';
+    mockData.replayScriptVersionCustom = '';
+
+    var injectedUrls = [];
+    mock('injectScript', function(url, success, failure, id) {
+      injectedUrls.push(url);
+      if (id === 'conviva_replay') {
+        mock('copyFromWindow', function(key) {
+          if (key === 'ConvivaReplay') return { init: function() {} };
+          return function() {};
+        });
+      }
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.1/conviva-replay.umd.min.js');
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with enableClIdInCookies nests flag under configs
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.enableClIdInCookies = true;
+
+    var initArg;
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        if (cmd === 'convivaAppTracker') initArg = arg;
+      };
+    });
+
+    runCode(mockData);
+    assertThat(initArg).isDefined();
+    assertThat(initArg.configs).isDefined();
+    assertThat(initArg.configs.enableClIdInCookies).isEqualTo(true);
+    assertThat(initArg.enableClIdInCookies).isEqualTo(undefined);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with enableClIdInCookies=false omits configs object
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.enableClIdInCookies = false;
+
+    var initArg;
+    mock('injectScript', function(url, success, failure) { success(); });
+    mock('copyFromWindow', function(key) {
+      return function(cmd, arg) {
+        if (cmd === 'convivaAppTracker') initArg = arg;
+      };
+    });
+
+    runCode(mockData);
+    assertThat(initArg).isDefined();
+    assertThat(initArg.configs).isEqualTo(undefined);
+    assertThat(initArg.enableClIdInCookies).isEqualTo(undefined);
+    assertApi('gtmOnSuccess').wasCalled();
+- name: Init with no version override uses DEFAULT_VERSION URL
+  code: |-
+    mockData.type = 'init';
+    mockData.convivaCustomerKey = 'test_key';
+    mockData.appId = 'Test App';
+    mockData.scriptSource = 'conviva_hosted';
+    mockData.scriptVersion = '';
+    mockData.scriptVersionCustom = '';
+
+    var injectedUrl;
+    mock('injectScript', function(url, success, failure) {
+      injectedUrl = url;
+      success();
+    });
+    mock('copyFromWindow', function(key) {
+      return function() {};
+    });
+
+    runCode(mockData);
+    assertThat(injectedUrl).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.1.0/convivaAppTracker.js');
+    assertApi('gtmOnSuccess').wasCalled();
+setup: const mockData = {};
+
+
+___NOTES___
+
+Conviva DPI JS SDK GTM Template. Created for Community Template Gallery.
+
+

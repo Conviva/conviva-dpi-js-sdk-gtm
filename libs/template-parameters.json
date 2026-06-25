@@ -1,0 +1,1090 @@
+[
+  {
+    "selectItems": [
+      {
+        "displayValue": "Initialize (init)",
+        "value": "init"
+      },
+      {
+        "displayValue": "Set User ID (setUserId)",
+        "value": "setUserId"
+      },
+      {
+        "displayValue": "Track Page View (trackPageView)",
+        "value": "trackPageView"
+      },
+      {
+        "displayValue": "Track Custom Event (trackCustomEvent)",
+        "value": "trackCustomEvent"
+      },
+      {
+        "displayValue": "Set Custom Tags (setCustomTags)",
+        "value": "setCustomTags"
+      },
+      {
+        "displayValue": "Unset Custom Tags (unsetCustomTags)",
+        "value": "unsetCustomTags"
+      },
+      {
+        "displayValue": "Track Error (trackError)",
+        "value": "trackError"
+      },
+      {
+        "displayValue": "Track Revenue (trackRevenue)",
+        "value": "trackRevenue"
+      }
+    ],
+    "displayName": "Tag type",
+    "defaultValue": "init",
+    "simpleValueType": true,
+    "name": "type",
+    "type": "SELECT",
+    "alwaysInSummary": true
+  },
+  {
+    "type": "LABEL",
+    "name": "initDescription",
+    "displayName": "Initialize – Loads the Conviva SDK and initializes with Customer Key, App ID, and App Version. Fire once per page (e.g. All Pages or Consent Initialization). \u003ca href\u003d\"https://github.com/Conviva/conviva-js-script-appanalytics\"\u003eSDK docs\u003c/a\u003e",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "LABEL",
+    "name": "setUserIdDescription",
+    "displayName": "Set User ID – Sets the viewer/user ID. Trigger after user is identified (e.g. login).",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "setUserId",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "LABEL",
+    "name": "trackPageViewDescription",
+    "displayName": "Track Page View – Sends a page view. Required for correct metrics. Use DOM Ready / Window Loaded (MPA) or History Change (SPA).",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackPageView",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "LABEL",
+    "name": "trackCustomEventDescription",
+    "displayName": "Track Custom Event – Sends a custom event with name and optional data.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackCustomEvent",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "LABEL",
+    "name": "setCustomTagsDescription",
+    "displayName": "Set Custom Tags – Key/value pairs applied to all subsequent events.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "setCustomTags",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "LABEL",
+    "name": "unsetCustomTagsDescription",
+    "displayName": "Unset Custom Tags – Removes previously set tag keys (comma-separated or one per line).",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "unsetCustomTags",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "LABEL",
+    "name": "trackErrorDescription",
+    "displayName": "Track Error – Reports an error (message, optional filename, optional error object variable).",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackError",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "LABEL",
+    "name": "trackRevenueDescription",
+    "displayName": "Track Revenue – Sends a revenue/purchase event (conviva_revenue_event) with order amount, order ID, and currency required; optional tax, shipping, discount, cart size, line items, and extra metadata. Uses same API as Custom Event.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "help": "Find your Customer Key in \u003ca href\u003d\"https://pulse.conviva.com/app/profile/applications\"\u003ePulse → My Profile → Applications\u003c/a\u003e.",
+    "alwaysInSummary": true,
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "displayName": "Conviva customer key*",
+    "simpleValueType": true,
+    "name": "convivaCustomerKey",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "help": "Application name, e.g. \"WEB App\", \"LGTV Web App\".",
+    "alwaysInSummary": true,
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "displayName": "App ID*",
+    "simpleValueType": true,
+    "name": "appId",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "App version",
+    "simpleValueType": true,
+    "name": "appVersion",
+    "type": "TEXT",
+    "valueHint": "e.g. 1.1.0",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "selectItems": [
+      {
+        "displayValue": "Conviva-hosted (recommended)",
+        "value": "conviva_hosted"
+      },
+      {
+        "displayValue": "Customer-hosted",
+        "value": "customer_hosted"
+      }
+    ],
+    "displayName": "Script source",
+    "defaultValue": "conviva_hosted",
+    "simpleValueType": true,
+    "name": "scriptSource",
+    "type": "SELECT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ],
+    "subParams": [
+      {
+        "selectItems": [
+          {
+            "displayValue": "v2.1.0",
+            "value": "v2.1.0"
+          },
+          {
+            "displayValue": "v2.0.2",
+            "value": "v2.0.2"
+          },
+          {
+            "displayValue": "v2.0.1",
+            "value": "v2.0.1"
+          },
+          {
+            "displayValue": "v2.0.0",
+            "value": "v2.0.0"
+          },
+          {
+            "displayValue": "v1.5.5",
+            "value": "v1.5.5"
+          }
+        ],
+        "displayName": "Script version",
+        "defaultValue": "v2.1.0",
+        "simpleValueType": true,
+        "name": "scriptVersion",
+        "type": "SELECT",
+        "help": "SDK version to load from Conviva CDN (sensor.conviva.com). Overridden by Custom version when set.",
+        "enablingConditions": [
+          {
+            "paramName": "scriptSource",
+            "paramValue": "conviva_hosted",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "displayName": "Custom version (optional)",
+        "simpleValueType": true,
+        "name": "scriptVersionCustom",
+        "type": "TEXT",
+        "valueHint": "Overrides dropdown when set (e.g. v2.1.0, v2.0.2)",
+        "enablingConditions": [
+          {
+            "paramName": "scriptSource",
+            "paramValue": "conviva_hosted",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "help": "Full URL to convivaAppTracker.js (required when Script source is Customer-hosted). Note: If you use a non-Conviva domain, you must add the domain to the template\u0027s Permissions (inject_script) in the GTM Template Editor, or grant container-level script injection permission for that domain.",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "displayName": "Script URL",
+        "simpleValueType": true,
+        "name": "scriptUrl",
+        "type": "TEXT",
+        "enablingConditions": [
+          {
+            "paramName": "scriptSource",
+            "paramValue": "customer_hosted",
+            "type": "EQUALS"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "defaultValue": false,
+    "simpleValueType": true,
+    "name": "initWithCohortReplay",
+    "checkboxText": "Init with Cohort Replay",
+    "type": "CHECKBOX",
+    "help": "When enabled, loads and initialises Conviva Session Replay (conviva-js-replay) before the main SDK. Uses the same Customer Key. Replay must run before AppAnalytics. See https://github.com/Conviva/conviva-js-replay.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "selectItems": [
+      {
+        "displayValue": "Conviva-hosted (recommended)",
+        "value": "conviva_hosted"
+      },
+      {
+        "displayValue": "Customer-hosted",
+        "value": "customer_hosted"
+      }
+    ],
+    "displayName": "Replay script source",
+    "defaultValue": "conviva_hosted",
+    "simpleValueType": true,
+    "name": "replayScriptSource",
+    "type": "SELECT",
+    "help": "Load Cohort Replay SDK from Conviva CDN or your own URL.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      },
+      {
+        "paramName": "initWithCohortReplay",
+        "paramValue": true,
+        "type": "EQUALS"
+      }
+    ],
+    "subParams": [
+      {
+        "selectItems": [
+          {
+            "displayValue": "v1.0.3",
+            "value": "v1.0.3"
+          },
+          {
+            "displayValue": "v1.0.2",
+            "value": "v1.0.2"
+          },
+          {
+            "displayValue": "v1.0.1",
+            "value": "v1.0.1"
+          }
+        ],
+        "displayName": "Replay script version",
+        "defaultValue": "v1.0.3",
+        "simpleValueType": true,
+        "name": "replayScriptVersion",
+        "type": "SELECT",
+        "help": "Replay SDK version from Conviva CDN. Overridden by Custom version when set.",
+        "enablingConditions": [
+          {
+            "paramName": "replayScriptSource",
+            "paramValue": "conviva_hosted",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "displayName": "Replay custom version (optional)",
+        "simpleValueType": true,
+        "name": "replayScriptVersionCustom",
+        "type": "TEXT",
+        "valueHint": "Overrides dropdown when set (e.g. v1.0.3, v1.0.2)",
+        "enablingConditions": [
+          {
+            "paramName": "replayScriptSource",
+            "paramValue": "conviva_hosted",
+            "type": "EQUALS"
+          }
+        ]
+      },
+      {
+        "help": "Full URL to conviva-replay.umd.min.js (or your replay bundle). Required when Replay script source is Customer-hosted. Note: If you use a non-Conviva domain, you must add the domain to the template\u0027s Permissions (inject_script) in the GTM Template Editor, or grant container-level script injection permission for that domain.",
+        "valueValidators": [
+          {
+            "type": "NON_EMPTY"
+          }
+        ],
+        "displayName": "Replay script URL",
+        "simpleValueType": true,
+        "name": "replayScriptUrl",
+        "type": "TEXT",
+        "enablingConditions": [
+          {
+            "paramName": "replayScriptSource",
+            "paramValue": "customer_hosted",
+            "type": "EQUALS"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "displayName": "User ID (optional)",
+    "simpleValueType": true,
+    "name": "initUserId",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Client ID (optional – set before init)",
+    "simpleValueType": true,
+    "name": "initClientId",
+    "type": "TEXT",
+    "help": "Sync clientId from another instance (e.g. mobile app, subdomain). Call setClientId before convivaAppTracker. Leave empty to let the SDK generate one.",
+    "valueHint": "e.g. from getClientId in another context",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Default custom tags",
+    "name": "initCustomTags",
+    "simpleTableColumns": [
+      {
+        "defaultValue": "",
+        "displayName": "Key",
+        "name": "key",
+        "type": "TEXT"
+      },
+      {
+        "defaultValue": "",
+        "displayName": "Value",
+        "name": "value",
+        "type": "TEXT"
+      }
+    ],
+    "type": "SIMPLE_TABLE",
+    "newRowButtonText": "Add Tag",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "defaultValue": true,
+    "simpleValueType": true,
+    "name": "enableClIdInCookies",
+    "checkboxText": "Enable Client ID in cookies (share clientId across subdomains)",
+    "type": "CHECKBOX",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "init",
+        "type": "EQUALS"
+      }
+    ],
+    "displayName": "Device metadata (optional)",
+    "name": "deviceMetadataGroup",
+    "groupStyle": "ZIPPY_CLOSED",
+    "type": "GROUP",
+    "subParams": [
+      {
+        "displayName": "Device brand",
+        "simpleValueType": true,
+        "name": "deviceBrand",
+        "type": "TEXT",
+        "valueHint": "e.g. Apple, Samsung SmartTV"
+      },
+      {
+        "displayName": "Device manufacturer",
+        "simpleValueType": true,
+        "name": "deviceManufacturer",
+        "type": "TEXT",
+        "valueHint": "e.g. Samsung, Apple"
+      },
+      {
+        "displayName": "Device model",
+        "simpleValueType": true,
+        "name": "deviceModel",
+        "type": "TEXT",
+        "valueHint": "e.g. iPhone 6 Plus, MacBookPro"
+      },
+      {
+        "displayName": "Device type",
+        "simpleValueType": true,
+        "name": "deviceType",
+        "type": "SELECT",
+        "defaultValue": "",
+        "selectItems": [
+          {
+            "displayValue": "",
+            "value": ""
+          },
+          {
+            "displayValue": "Desktop",
+            "value": "DESKTOP"
+          },
+          {
+            "displayValue": "Games Console",
+            "value": "Console"
+          },
+          {
+            "displayValue": "Set Top Box",
+            "value": "Settop"
+          },
+          {
+            "displayValue": "Mobile",
+            "value": "Mobile"
+          },
+          {
+            "displayValue": "Tablet",
+            "value": "Tablet"
+          },
+          {
+            "displayValue": "Smart TV",
+            "value": "SmartTV"
+          },
+          {
+            "displayValue": "Vehicle",
+            "value": "Vehicle"
+          },
+          {
+            "displayValue": "Other",
+            "value": "Other"
+          }
+        ]
+      },
+      {
+        "displayName": "Device version",
+        "simpleValueType": true,
+        "name": "deviceVersion",
+        "type": "TEXT",
+        "valueHint": "e.g. NAForMac"
+      },
+      {
+        "displayName": "Operating system name",
+        "simpleValueType": true,
+        "name": "deviceOsName",
+        "type": "TEXT",
+        "valueHint": "e.g. MAC, WINDOWS, LINUX, IOS, ANDROID"
+      },
+      {
+        "displayName": "Operating system version",
+        "simpleValueType": true,
+        "name": "deviceOsVersion",
+        "type": "TEXT",
+        "valueHint": "e.g. 10.13.6, 8.1"
+      },
+      {
+        "displayName": "Device category",
+        "simpleValueType": true,
+        "name": "deviceCategory",
+        "type": "SELECT",
+        "defaultValue": "",
+        "selectItems": [
+          {
+            "displayValue": "",
+            "value": ""
+          },
+          {
+            "displayValue": "Android Device (AND)",
+            "value": "AND"
+          },
+          {
+            "displayValue": "Apple Device (APL)",
+            "value": "APL"
+          },
+          {
+            "displayValue": "Chromecast (CHR)",
+            "value": "CHR"
+          },
+          {
+            "displayValue": "Desktop App (DSKAPP)",
+            "value": "DSKAPP"
+          },
+          {
+            "displayValue": "Device Simulator (SIMULATOR)",
+            "value": "SIMULATOR"
+          },
+          {
+            "displayValue": "LG TV (LGTV)",
+            "value": "LGTV"
+          },
+          {
+            "displayValue": "Nintendo (NINTENDO)",
+            "value": "NINTENDO"
+          },
+          {
+            "displayValue": "PlayStation (PS)",
+            "value": "PS"
+          },
+          {
+            "displayValue": "Roku (RK)",
+            "value": "RK"
+          },
+          {
+            "displayValue": "Samsung TV (SAMSUNGTV)",
+            "value": "SAMSUNGTV"
+          },
+          {
+            "displayValue": "Smart TV (TV)",
+            "value": "TV"
+          },
+          {
+            "displayValue": "Set Top Box (STB)",
+            "value": "STB"
+          },
+          {
+            "displayValue": "TiVo (TIVO)",
+            "value": "TIVO"
+          },
+          {
+            "displayValue": "Web (WEB)",
+            "value": "WEB"
+          },
+          {
+            "displayValue": "Windows Device (WIN)",
+            "value": "WIN"
+          },
+          {
+            "displayValue": "Xbox (XB)",
+            "value": "XB"
+          },
+          {
+            "displayValue": "KaiOS Device (KAIOS)",
+            "value": "KAIOS"
+          },
+          {
+            "displayValue": "Linux (LNX)",
+            "value": "LNX"
+          }
+        ]
+      },
+      {
+        "displayName": "Framework name",
+        "simpleValueType": true,
+        "name": "deviceFrameworkName",
+        "type": "TEXT",
+        "valueHint": "e.g. Web"
+      },
+      {
+        "displayName": "Framework version",
+        "simpleValueType": true,
+        "name": "deviceFrameworkVersion",
+        "type": "TEXT",
+        "valueHint": "e.g. 1.0.0"
+      }
+    ]
+  },
+  {
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "displayName": "User ID*",
+    "simpleValueType": true,
+    "name": "setUserId",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "setUserId",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Page title override",
+    "simpleValueType": true,
+    "name": "trackPageViewTitle",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackPageView",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "displayName": "Event name*",
+    "simpleValueType": true,
+    "name": "eventName",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackCustomEvent",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Event data",
+    "name": "eventData",
+    "simpleTableColumns": [
+      {
+        "defaultValue": "",
+        "displayName": "Name",
+        "name": "name",
+        "type": "TEXT"
+      },
+      {
+        "defaultValue": "",
+        "displayName": "Value",
+        "name": "value",
+        "type": "TEXT"
+      }
+    ],
+    "type": "SIMPLE_TABLE",
+    "newRowButtonText": "Add Property",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackCustomEvent",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "SELECT",
+    "name": "eventDataObject",
+    "displayName": "Event data object (variable)",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "help": "Expected type: object. Optional GTM variable returning a key-value object. Merged with the data table above if both are set.",
+    "notSetText": "Don\u0027t set",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackCustomEvent",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "help": "Total order amount (required). Expected type: number. Non-numeric values will cause the tag to fail.",
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "displayName": "Total order amount*",
+    "simpleValueType": true,
+    "name": "revenueTotalOrderAmount",
+    "type": "TEXT",
+    "valueHint": "e.g. 99.99",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "help": "Order ID / transaction ID (required). Expected type: string. Empty values will cause the tag to fail.",
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "displayName": "Order ID (transaction ID)*",
+    "simpleValueType": true,
+    "name": "revenueOrderId",
+    "type": "TEXT",
+    "valueHint": "e.g. ord_12345",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "help": "ISO 4217 currency code (required). Expected type: string (e.g. USD, EUR, GBP). Empty values will cause the tag to fail.",
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "displayName": "Currency*",
+    "simpleValueType": true,
+    "name": "revenueCurrency",
+    "type": "TEXT",
+    "valueHint": "e.g. USD",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Tax amount",
+    "simpleValueType": true,
+    "name": "revenueTaxAmount",
+    "type": "TEXT",
+    "help": "Optional. Expected type: number. Non-numeric values will be skipped.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Shipping cost",
+    "simpleValueType": true,
+    "name": "revenueShippingCost",
+    "type": "TEXT",
+    "help": "Optional. Expected type: number. Non-numeric values will be skipped.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Discount / coupon value",
+    "simpleValueType": true,
+    "name": "revenueDiscount",
+    "type": "TEXT",
+    "help": "Optional. Expected type: number. Non-numeric values will be skipped.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Cart size (number of items)",
+    "simpleValueType": true,
+    "name": "revenueCartSize",
+    "type": "TEXT",
+    "valueHint": "e.g. 3",
+    "help": "Optional. Expected type: number (integer). Non-numeric values will be skipped.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "SELECT",
+    "name": "revenueItemsList",
+    "displayName": "Purchased items (variable)",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "notSetText": "Don\u0027t set",
+    "help": "Expected type: array of objects. Select a GTM variable that returns an array of line-item objects. Passed through as-is to the event. Recommended keys per item: productId, name, sku, category, unitPrice, quantity, discount, brand, variant; other keys are sent as-is.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Payment method",
+    "simpleValueType": true,
+    "name": "revenuePaymentMethod",
+    "type": "TEXT",
+    "valueHint": "e.g. card, ApplePay, PayPal",
+    "help": "Optional. Expected type: string. Empty values will be skipped.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Payment provider",
+    "simpleValueType": true,
+    "name": "revenuePaymentProvider",
+    "type": "TEXT",
+    "valueHint": "e.g. Stripe, Adyen",
+    "help": "Optional. Expected type: string. Empty values will be skipped.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Order status",
+    "simpleValueType": true,
+    "name": "revenueOrderStatus",
+    "type": "TEXT",
+    "help": "Optional. Expected type: string. Empty values will be skipped.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Additional metadata",
+    "name": "revenueExtraMetadata",
+    "simpleTableColumns": [
+      {
+        "defaultValue": "",
+        "displayName": "Key",
+        "name": "key",
+        "type": "TEXT"
+      },
+      {
+        "defaultValue": "",
+        "displayName": "Value",
+        "name": "value",
+        "type": "TEXT"
+      }
+    ],
+    "type": "SIMPLE_TABLE",
+    "newRowButtonText": "Add row",
+    "help": "Expected type: object (key-value pairs). Sent as extraMetadata in the revenue event payload. Merged with the variable below if both are set.",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "SELECT",
+    "name": "revenueDataObject",
+    "displayName": "Revenue data object (variable)",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "help": "Expected type: object. Optional GTM variable returning a key-value object. Sent as extraMetadata, merged with the metadata table above if both are set.",
+    "notSetText": "Don\u0027t set",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackRevenue",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Custom tags",
+    "name": "setCustomTagsTable",
+    "simpleTableColumns": [
+      {
+        "defaultValue": "",
+        "displayName": "Key",
+        "name": "key",
+        "type": "TEXT"
+      },
+      {
+        "defaultValue": "",
+        "displayName": "Value",
+        "name": "value",
+        "type": "TEXT"
+      }
+    ],
+    "type": "SIMPLE_TABLE",
+    "newRowButtonText": "Add Tag",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "setCustomTags",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "SELECT",
+    "name": "setCustomTagsObject",
+    "displayName": "Custom tags (variable)",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "help": "Optional: select a GTM variable that returns an object (e.g. {{Conviva – Custom Tags}}). Merged with the table above if both set.",
+    "notSetText": "Don\u0027t set",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "setCustomTags",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "help": "Comma-separated list of tag keys to unset, e.g. tagKey1, tagKey2",
+    "displayName": "Tag keys to unset",
+    "simpleValueType": true,
+    "name": "unsetCustomTagsKeys",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "unsetCustomTags",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "valueValidators": [
+      {
+        "type": "NON_EMPTY"
+      }
+    ],
+    "displayName": "Error message*",
+    "simpleValueType": true,
+    "name": "trackErrorMessage",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackError",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "displayName": "Filename (optional)",
+    "simpleValueType": true,
+    "name": "trackErrorFilename",
+    "type": "TEXT",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackError",
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "SELECT",
+    "name": "trackErrorObject",
+    "displayName": "Error object (variable)",
+    "macrosInSelect": true,
+    "selectItems": [],
+    "simpleValueType": true,
+    "notSetText": "Don\u0027t set",
+    "enablingConditions": [
+      {
+        "paramName": "type",
+        "paramValue": "trackError",
+        "type": "EQUALS"
+      }
+    ]
+  }
+]

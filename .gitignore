@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+.env
+
+coverage/
+playwright-report/
+test-results/
+
+# AI/agent caches
+.claude/
+.cursor/

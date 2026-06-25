@@ -1,0 +1,61 @@
+# Mirrors new GitHub issues into Jira (TOOLING_PLAN.md item #18).
+# Requires repo secrets: JIRA_BASE_URL, JIRA_USER_EMAIL, JIRA_API_TOKEN, JIRA_PROJECT
+
+name: Jira issue mirror
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-jira-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Jira issue from GitHub issue
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_PROJECT: ${{ secrets.JIRA_PROJECT }}
+          GH_TITLE: ${{ github.event.issue.title }}
+          GH_URL: ${{ github.event.issue.html_url }}
+          GH_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+          for v in JIRA_BASE_URL JIRA_USER_EMAIL JIRA_API_TOKEN JIRA_PROJECT; do
+            if [ -z "${!v:-}" ]; then
+              echo "::warning::Skipping Jira mirror — secret $v is not configured."
+              exit 0
+            fi
+          done
+
+          python3 <<'PY'
+          import json, os, urllib.request
+
+          base = os.environ["JIRA_BASE_URL"].rstrip("/")
+          auth = (os.environ["JIRA_USER_EMAIL"], os.environ["JIRA_API_TOKEN"])
+          summary = ("GitHub: " + os.environ["GH_TITLE"])[:250]
+          description = os.environ["GH_URL"] + "\n\n" + (os.environ.get("GH_BODY") or "")
+
+          payload = {
+              "fields": {
+                  "project": {"key": os.environ["JIRA_PROJECT"]},
+                  "summary": summary,
+                  "description": description,
+                  "issuetype": {"name": "Task"},
+              }
+          }
+
+          req = urllib.request.Request(
+              base + "/rest/api/3/issue",
+              data=json.dumps(payload).encode(),
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          import base64
+          token = base64.b64encode(f"{auth[0]}:{auth[1]}".encode()).decode()
+          req.add_header("Authorization", f"Basic {token}")
+
+          with urllib.request.urlopen(req) as resp:
+              print("Jira issue created:", resp.read().decode()[:200])
+          PY

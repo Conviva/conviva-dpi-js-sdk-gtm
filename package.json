@@ -1,0 +1,51 @@
+{
+  "name": "conviva-dpi-js-sdk-gtm",
+  "version": "1.1.0",
+  "description": "Google Tag Manager community template for the Conviva DPI JS SDK.",
+  "private": true,
+  "packageManager": "pnpm@10.26.1",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "build": "node scripts/build-template.js && node scripts/generate-types.js",
+    "sync": "node scripts/sync-template.js",
+    "dev": "pnpm setup-env && vite serve",
+    "test": "jest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "type-check": "tsc --noEmit",
+    "setup-env": "node scripts/setup-env.js",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Conviva/conviva-dpi-js-sdk-gtm.git"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Conviva/conviva-dpi-js-sdk-gtm/issues"
+  },
+  "homepage": "https://github.com/Conviva/conviva-dpi-js-sdk-gtm#readme",
+  "dependencies": {
+    "yaml-lint": "^1.7.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.28.3",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "ejs": "^3.1.10",
+    "eslint": "^8.57.0",
+    "husky": "^9.1.7",
+    "jest": "^30.1.3",
+    "jest-environment-jsdom": "^30.1.2",
+    "ts-jest": "^29.4.4",
+    "typescript": "^5.0.0",
+    "vite": "^7.1.6",
+    "@playwright/test": "1.55.0"
+  }
+}

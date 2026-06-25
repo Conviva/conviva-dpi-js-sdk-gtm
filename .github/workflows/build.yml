@@ -1,0 +1,59 @@
+# TOOLING_PLAN.md item #6 — lint, build freshness, yaml-lint, type-check, tests.
+# Integration branch is develop; main is included so post-promotion PRs stay gated.
+
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build template from libs/
+        run: pnpm build
+
+      - name: Assert generated outputs are committed
+        run: |
+          if ! git diff --quiet template.tpl src/generated-types.ts; then
+            echo "::error::Generated template.tpl or src/generated-types.ts is out of date. Run pnpm build and commit."
+            git --no-pager diff --stat template.tpl src/generated-types.ts
+            exit 1
+          fi
+
+      - name: Lint metadata.yaml
+        run: pnpm exec yamllint metadata.yaml
+
+      - name: Type-check
+        run: pnpm type-check
+
+      - name: Lint TypeScript sources
+        run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Verify GitHub Actions are SHA-pinned
+        run: node scripts/check-action-shas.js
