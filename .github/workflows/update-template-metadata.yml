@@ -40,7 +40,7 @@ jobs:
           pnpm type-check
           pnpm lint
           pnpm test
-          pnpm exec yaml-lint metadata.yaml
+          pnpm exec yamllint metadata.yaml
 
       - name: Install PyYAML
         run: python3 -m pip install --quiet pyyaml

@@ -44,7 +44,7 @@ jobs:
           fi
 
       - name: Lint metadata.yaml
-        run: pnpm exec yaml-lint metadata.yaml
+        run: pnpm exec yamllint metadata.yaml
 
       - name: Type-check
         run: pnpm type-check
