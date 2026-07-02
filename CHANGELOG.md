@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.1] - 2026-07-02
+
+### Added
+
+- Support for **Conviva DPI JS SDK v2.2.1** in the Script version dropdown; v2.2.1 is now the default selection for new tags. `DEFAULT_VERSION` fallback constant bumped from `v2.2.0` to `v2.2.1`.
+
+### Tests
+
+- Default-version URL test updated to assert that an Init tag with no version override resolves to `v2.2.1/convivaAppTracker.js`.
+
+
 All notable changes to the Conviva DPI JS SDK GTM Template project are documented in this file.
 
 ## [1.2.0] - 2026-05-24
@@ -62,3 +73,12 @@ All notable changes to the Conviva DPI JS SDK GTM Template project are documente
 - Permissions: `inject_script` (sensor.conviva.com CDN), `access_globals` (apptracker, apptracker.q, apptracker.q.push, GlobalConvivaNamespace, ConvivaReplay), `logging` (debug only).
 - 35 unit test scenarios covering all tag types, Cohort Replay, customer-hosted URLs, pre-init queue, and failure paths.
 - README, GTM_SETUP.md, INTEGRATION_GUIDE.md, LICENSE (Apache 2.0), and metadata.yaml for Community Template Gallery submission.
+## [1.2.1] - 2026-07-02
+
+### Added
+
+- Support for **Conviva DPI JS SDK v2.2.1** in the Script version dropdown; v2.2.1 is now the default selection for new tags. `DEFAULT_VERSION` fallback constant bumped from `v2.2.0` to `v2.2.1`.
+
+### Tests
+
+- Default-version URL test updated to assert that an Init tag with no version override resolves to `v2.2.1/convivaAppTracker.js`.
