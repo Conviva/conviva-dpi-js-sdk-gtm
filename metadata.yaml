@@ -5,7 +5,7 @@ homepage: "https://www.conviva.ai"
 documentation: "https://github.com/Conviva/conviva-dpi-js-sdk-gtm"
 versions:
   - sha: "9d9352f331d3cf26ecbd88a0afb3b2dc7bdac0f6"
-    changeNotes: "Added support for DPI v2.2.1 as the new default Script version for new tags. DEFAULT_VERSION fallback constant bumped from v2.2.0 to v2.2.1."
+    changeNotes: "Added support for DPI v2.2.1 as the new default Script version for new tags. DEFAULT_VERSION fallback constant bumped from v2.2.0 to v2.2.1 ."
   - sha: "e00792518691d621e2a86090a27fe0e38e1e4bff"
     changeNotes: "Added support for DPI v2.2.0 and Cohort Replay v1.0.4 as the new defaults for new tags. Compatibility hints now remind GTM admins to pair DPI v2.2.0+ with Replay v1.0.4+ for correct mid-session clientId synchronization in hybrid Android/iOS apps. Fixed enableClIdInCookies to always pass under configs.enableClIdInCookies, defaulting to true and honoring opt-out only when the checkbox is explicitly unchecked."
   - sha: "6499b88209cf93f39f10dcdc0bdcf6eefffec142"
