@@ -1,4 +1,14 @@
 # Changelog
+## [1.2.2] - 2026-07-13
+
+### Added
+
+- Support for **Conviva DPI JS SDK v2.2.2** in the Script version dropdown; v2.2.2 is now the default selection for new tags. `DEFAULT_VERSION` fallback constant bumped from `v2.2.1` to `v2.2.2`.
+
+### Tests
+
+- Default-version URL test updated to assert that an Init tag with no version override resolves to `v2.2.2/convivaAppTracker.js`.
+
 
 ## [1.2.1] - 2026-07-02
 
