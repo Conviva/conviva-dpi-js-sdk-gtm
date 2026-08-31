@@ -251,6 +251,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "selectItems": [
           {
+            "displayValue": "v2.3.0",
+            "value": "v2.3.0"
+          },
+          {
             "displayValue": "v2.2.2",
             "value": "v2.2.2"
           },
@@ -284,7 +288,7 @@ ___TEMPLATE_PARAMETERS___
           }
         ],
         "displayName": "Script version",
-        "defaultValue": "v2.2.2",
+        "defaultValue": "v2.3.0",
         "simpleValueType": true,
         "name": "scriptVersion",
         "type": "SELECT",
@@ -302,7 +306,7 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "scriptVersionCustom",
         "type": "TEXT",
-        "valueHint": "Overrides dropdown when set (e.g. v2.2.2, v2.1.0)",
+        "valueHint": "Overrides dropdown when set (e.g. v2.3.0, v2.2.2, v2.1.0)",
         "enablingConditions": [
           {
             "paramName": "scriptSource",
@@ -1157,7 +1161,7 @@ const Object = require('Object');
 // Constants – Conviva script creates window.apptracker; Conviva-hosted URL built from version (sensor.conviva.com)
 const CONVIVA_SCRIPT_BASE = 'https://sensor.conviva.com/dpi/releases/';
 const CONVIVA_SCRIPT_FILE = '/convivaAppTracker.js';
-const DEFAULT_VERSION = 'v2.2.2';
+const DEFAULT_VERSION = 'v2.3.0';
 const LOG_PREFIX = '[Conviva DPI JS SDK / GTM] ';
 // Cohort Replay – must load and init before main SDK (same Conviva CDN pattern)
 const REPLAY_SCRIPT_BASE = 'https://sensor.conviva.com/replay/releases/';
@@ -1898,8 +1902,8 @@ scenarios:
     runCode(mockData);
     assertThat(loadOrder[0]).isEqualTo('conviva_replay');
     assertThat(loadOrder[1]).isEqualTo('conviva_appanalytics');
-    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.1/conviva-replay.umd.min.js');
-    assertThat(injectedUrls[1]).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.2.2/convivaAppTracker.js');
+    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.4/conviva-replay.umd.min.js');
+    assertThat(injectedUrls[1]).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.3.0/convivaAppTracker.js');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Init with Cohort Replay disabled does not load replay script
   code: |-
@@ -2283,7 +2287,7 @@ scenarios:
 
     runCode(mockData);
     assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.1/conviva-replay.umd.min.js');
-    assertThat(injectedUrls[1]).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.2.2/convivaAppTracker.js');
+    assertThat(injectedUrls[1]).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.3.0/convivaAppTracker.js');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Init with enableClIdInCookies nests flag under configs
   code: |-
@@ -2421,7 +2425,7 @@ scenarios:
     });
 
     runCode(mockData);
-    assertThat(injectedUrl).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.2.2/convivaAppTracker.js');
+    assertThat(injectedUrl).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.3.0/convivaAppTracker.js');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Init with no replay version override uses REPLAY_DEFAULT_VERSION URL
   code: |-
@@ -2452,8 +2456,8 @@ scenarios:
     });
 
     runCode(mockData);
-    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.4/conviva-replay.umd.min.js');
-    assertThat(injectedUrls[1]).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.2.2/convivaAppTracker.js');
+    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.1/conviva-replay.umd.min.js');
+    assertThat(injectedUrls[1]).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.3.0/convivaAppTracker.js');
     assertApi('gtmOnSuccess').wasCalled();
 setup: const mockData = {};
 
