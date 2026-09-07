@@ -310,7 +310,7 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "scriptVersionCustom",
         "type": "TEXT",
-        "valueHint": "Overrides dropdown when set (e.g. v2.3.1, v2.2.2, v2.1.0)",
+        "valueHint": "Overrides dropdown when set (e.g. v2.3.1, v2.3.0, v2.2.2)",
         "enablingConditions": [
           {
             "paramName": "scriptSource",
@@ -423,7 +423,7 @@ ___TEMPLATE_PARAMETERS___
         "simpleValueType": true,
         "name": "replayScriptVersionCustom",
         "type": "TEXT",
-        "valueHint": "Overrides dropdown when set (e.g. v1.0.4, v1.0.3)",
+        "valueHint": "Overrides dropdown when set (e.g. v1.0.4, v1.0.3, v1.0.2)",
         "enablingConditions": [
           {
             "paramName": "replayScriptSource",
