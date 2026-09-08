@@ -8,7 +8,7 @@
 
 ### Tests
 
-- Default-version URL test updated to assert that an Init tag with no version override resolves to `v2.3.1/convivaAppTracker.js`.
+- Default-version URL tests updated: DPI with no override resolves to `v2.3.1/convivaAppTracker.js`; Replay with no override resolves to `v1.0.4/conviva-replay.umd.min.js`. Load-order test asserts the selected Replay version (`v1.0.1`), not the default.
 
 ## [1.2.3] - 2026-08-31
 

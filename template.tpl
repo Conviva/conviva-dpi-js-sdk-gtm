@@ -1906,7 +1906,7 @@ scenarios:
     runCode(mockData);
     assertThat(loadOrder[0]).isEqualTo('conviva_replay');
     assertThat(loadOrder[1]).isEqualTo('conviva_appanalytics');
-    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.4/conviva-replay.umd.min.js');
+    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.1/conviva-replay.umd.min.js');
     assertThat(injectedUrls[1]).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.3.1/convivaAppTracker.js');
     assertApi('gtmOnSuccess').wasCalled();
 - name: Init with Cohort Replay disabled does not load replay script
@@ -2460,7 +2460,7 @@ scenarios:
     });
 
     runCode(mockData);
-    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.1/conviva-replay.umd.min.js');
+    assertThat(injectedUrls[0]).isEqualTo('https://sensor.conviva.com/replay/releases/v1.0.4/conviva-replay.umd.min.js');
     assertThat(injectedUrls[1]).isEqualTo('https://sensor.conviva.com/dpi/releases/v2.3.1/convivaAppTracker.js');
     assertApi('gtmOnSuccess').wasCalled();
 setup: const mockData = {};
