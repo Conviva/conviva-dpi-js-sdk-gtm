@@ -4,6 +4,8 @@
 homepage: "https://www.conviva.ai"
 documentation: "https://github.com/Conviva/conviva-dpi-js-sdk-gtm"
 versions:
+  - sha: "521fa5ade5bb7104c9aeecfb1803fed9772e8a57"
+    changeNotes: "Added support for DPI v2.3.1 as the new default Script version for new tags. DEFAULT_VERSION fallback constant bumped from v2.3.0 to v2.3.1."
   - sha: "98eab6118f71cd8956e73804fa4da3ab6d86e2a8"
     changeNotes: "Added support for DPI v2.3.0 as the new default Script version for new tags. DEFAULT_VERSION fallback constant bumped from v2.2.2 to v2.3.0."
   - sha: "6a052e358eecce967b514bc99d43fb9c19b56e99"
