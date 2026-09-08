@@ -1,4 +1,15 @@
 # Changelog
+
+## [1.2.4] - 2026-09-08
+
+### Added
+
+- Support for **Conviva DPI JS SDK v2.3.1** in the Script version dropdown; v2.3.1 is now the default selection for new tags. `DEFAULT_VERSION` fallback constant bumped from `v2.3.0` to `v2.3.1`.
+
+### Tests
+
+- Default-version URL tests updated: DPI with no override resolves to `v2.3.1/convivaAppTracker.js`; Replay with no override resolves to `v1.0.4/conviva-replay.umd.min.js`. Load-order test asserts the selected Replay version (`v1.0.1`), not the default.
+
 ## [1.2.3] - 2026-08-31
 
 ### Added
